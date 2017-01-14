@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+
+    <TextView
+        android:text="Units"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_weight="0.04" />
+
+    <Switch
+        android:text="Velocity (m/s or km/h)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/switch10"
+        android:layout_weight="0.04" />
+
+    <Switch
+        android:text="Distance (m or km)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/switch12"
+        android:layout_weight="0.04" />
+
+    <Switch
+        android:text="Time (s or h)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/switch11"
+        android:layout_weight="0.04" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.20" />
+
+    <TextView
+        android:text="Frequency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        android:layout_weight="0.04" />
+
+    <CheckBox
+        android:text="Low Refresh Rate (Lower Power Usage)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox"
+        android:layout_weight="0.04" />
+
+    <CheckBox
+        android:text="Medium Refresh Rate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox2"
+        android:layout_weight="0.04" />
+
+    <CheckBox
+        android:text="High Refresh Rate (High Power Usage)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox3"
+        android:layout_weight="0.04" />
+
+</LinearLayout>
