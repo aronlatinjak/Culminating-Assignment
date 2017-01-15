@@ -21,28 +21,28 @@
         android:text="Units"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2"
+        android:id="@+id/tvUnits"
         android:layout_weight="0.04" />
 
     <Switch
         android:text="Velocity (m/s or km/h)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/switch10"
+        android:id="@+id/switchVelocity"
         android:layout_weight="0.04" />
 
     <Switch
         android:text="Distance (m or km)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/switch12"
+        android:id="@+id/switchDistance"
         android:layout_weight="0.04" />
 
     <Switch
         android:text="Time (s or h)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/switch11"
+        android:id="@+id/switchTime"
         android:layout_weight="0.04" />
 
     <Space
@@ -54,21 +54,21 @@
         android:text="Frequency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView3"
+        android:id="@+id/tvFrequency"
         android:layout_weight="0.04" />
 
     <CheckBox
         android:text="Low Refresh Rate (Lower Power Usage)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/checkBox"
+        android:id="@+id/cbLowRefresh"
         android:layout_weight="0.04" />
 
     <CheckBox
         android:text="Medium Refresh Rate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/checkBox2"
+        android:id="@+id/cbMediumRefresh"
         android:layout_weight="0.04"
         android:checked="true" />
 
@@ -76,7 +76,7 @@
         android:text="High Refresh Rate (High Power Usage)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/checkBox3"
+        android:id="@+id/cbHighRefresh"
         android:layout_weight="0.04" />
 
 </LinearLayout>
