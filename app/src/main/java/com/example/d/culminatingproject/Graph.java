@@ -19,21 +19,4 @@ public class Graph {
         ys = yPoints;
     }
 
-    public Drawable getImage() {
-
-        Bitmap bi = Bitmap.createBitmap(1500, 500, Bitmap.Config.ARGB_8888);
-        
-        //maxX=xs[0];
-        //for (long c:
-        //     ) {
-        //
-        //}
-        
-        //maxX;
-        //maxY;
-        
-        return new BitmapDrawable(null, bi);
-
-    }
-
 }

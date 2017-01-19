@@ -11,32 +11,38 @@
     tools:context="com.example.d.culminatingproject.StatisticsActivity">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="414dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:orientation="vertical"
+        android:weightSum="1">
 
-        <Switch
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/switchVelocityPosition"
-            android:layout_weight="75"
-            android:checked="false" />
+            android:layout_height="@dimen/icons" >
 
-        <TextView
-            android:text="Position vs Time"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/tvGraphTitle"
-            android:layout_weight="25"
-            android:gravity="center"
-            android:textStyle="normal|bold"
-            android:textSize="18sp"/>
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/switchVelocityPosition"
+                android:layout_weight="75"
+                android:checked="false" />
+
+            <TextView
+                android:text="Position vs Time"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tvGraphTitle"
+                android:layout_weight="25"
+                android:gravity="center"
+                android:textStyle="normal|bold"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" />
+
     </LinearLayout>
-
-    <com.jjoe64.graphview.GraphView />
 
 </RelativeLayout>
