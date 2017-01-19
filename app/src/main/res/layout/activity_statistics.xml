@@ -36,4 +36,7 @@
             android:textStyle="normal|bold"
             android:textSize="18sp"/>
     </LinearLayout>
+
+    <com.jjoe64.graphview.GraphView />
+
 </RelativeLayout>

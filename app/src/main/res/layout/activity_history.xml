@@ -37,7 +37,8 @@
         android:src="@android:drawable/ic_menu_search"
         android:maxWidth="@dimen/icons"
         android:maxHeight="@dimen/icons"
-        android:background="#00000000" />
+        android:tint="@color/colorIconBlue"
+        android:background="@color/colorClear" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -73,13 +74,16 @@
             android:layout_width="@dimen/icons"
             android:layout_height="@dimen/icons"
             android:src="@android:drawable/ic_menu_delete"
-            android:background="#00000000" />
+            android:background="#00000000"
+            android:tint="@color/colorIconBlue"/>
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/icons"
+            android:layout_height="@dimen/icons"
             android:id="@+id/imageButton2"
-            android:src="@android:drawable/stat_sys_download" />
+            android:src="@android:drawable/stat_sys_download"
+            android:background="@color/colorClear"
+            android:tint="@color/colorIconBlue" />
 
     </LinearLayout>
 
