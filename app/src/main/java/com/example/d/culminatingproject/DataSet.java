@@ -25,7 +25,6 @@ public class DataSet implements Comparable {
         //getSystemService(Context.SENSOR_SERVICE);
         initialTime = new Date();
         dataPoints = new ArrayList<>();
-        dataPoints.add(new DataPoint(System.currentTimeMillis(), 0, 0, 0, 0, 0, 0));
     }
 
     /**
@@ -37,11 +36,18 @@ public class DataSet implements Comparable {
     public void establishNextDataPoint(double xAcceleration, double yAcceleration, double zAcceleration) {
 
         if (!isFinished) {
-            DataPoint last = dataPoints.get(dataPoints.size()-1);
-            DataPoint newPoint = new DataPoint(System.currentTimeMillis(),
-                    xAcceleration, yAcceleration, zAcceleration,
-                    last.getXVelocity(), last.getYVelocity(), last.getZVelocity());
-            dataPoints.add(newPoint);
+            if(dataPoints.isEmpty()) {
+                DataPoint newPoint = new DataPoint(System.currentTimeMillis(),
+                        xAcceleration, yAcceleration, zAcceleration,
+                        0, 0, 0);
+                dataPoints.add(newPoint);
+            } else {
+                DataPoint last = dataPoints.get(dataPoints.size() - 1);
+                DataPoint newPoint = new DataPoint(System.currentTimeMillis(),
+                        xAcceleration, yAcceleration, zAcceleration,
+                        last.getXVelocity(), last.getYVelocity(), last.getZVelocity());
+                dataPoints.add(newPoint);
+            }
         }
 
     }
@@ -79,7 +85,7 @@ public class DataSet implements Comparable {
 
         for (DataPoint dp:
                 dataPoints) {
-            if (dp.getVelocity() > max) {
+            if (dp.getAcceleration() > max) {
                 max = dp.getAcceleration();
             }
         }
@@ -104,7 +110,10 @@ public class DataSet implements Comparable {
      * @return the amount of time over which data was taken, in milliseconds
      */
     public long getTimeElapsedMillis() {
-        return ((dataPoints.get(dataPoints.size()-1)).getTime() - (dataPoints.get(0)).getTime());
+        if (!dataPoints.isEmpty()) {
+            return ((dataPoints.get(dataPoints.size()-1)).getTime() - (dataPoints.get(0)).getTime());
+        }
+        return 0;
     }
 
     /**
