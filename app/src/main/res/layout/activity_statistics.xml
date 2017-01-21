@@ -109,15 +109,15 @@
                 android:textSize="17sp" />
 
             <TextView
-                android:text="Velocity:"
+                android:text="Max Velocity:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvVelocity"
+                android:id="@+id/tvMaxVelocity"
                 android:textSize="16sp"
                 android:textIsSelectable="false" />
 
             <TextView
-                android:text="Time:"
+                android:text="Time Elapsed:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvTime"
@@ -125,10 +125,10 @@
                 android:textIsSelectable="false" />
 
             <TextView
-                android:text="Displacement:"
+                android:text="Max Acceleration:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvDisplacement"
+                android:id="@+id/tvMaxAccel"
                 android:textSize="16sp"
                 android:textIsSelectable="false" />
         </LinearLayout>
