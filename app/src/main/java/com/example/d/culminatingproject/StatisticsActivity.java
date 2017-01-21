@@ -28,6 +28,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
         GraphView graphView = (GraphView) findViewById(R.id.data_graph);
 
+
+
         LineGraphSeries<com.jjoe64.graphview.series.DataPoint> points = new LineGraphSeries<>(new DataPoint[] {
             new DataPoint(0,1),
             new DataPoint(1, 5),
