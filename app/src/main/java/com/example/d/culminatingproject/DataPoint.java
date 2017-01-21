@@ -9,14 +9,34 @@ import java.sql.Time;
 public class DataPoint {
 
     private long t;
-    private double v;
-    private double a;
+    private double vX;
+    private double vY;
+    private double vZ;
+    private double aX;
+    private double aY;
+    private double aZ;
 
-    public DataPoint(long time, double velocity, double acceleration) {
+    /**
+     * Used to store a set of data.
+     * @param time
+     * @param xAcceleration
+     * @param yAcceleration
+     * @param zAcceleration
+     * @param lastXVelocity
+     * @param lastYVelocity
+     * @param lastZVelocity
+     */
+    public DataPoint(long time,
+                     double xAcceleration, double yAcceleration, double zAcceleration,
+                     double lastXVelocity, double lastYVelocity, double lastZVelocity) {
 
         t =time;
-        v = velocity;
-        a = acceleration;
+        aX = xAcceleration;
+        aY = yAcceleration;
+        aZ = zAcceleration;
+        vX = lastXVelocity + xAcceleration;
+        vY = lastYVelocity + yAcceleration;
+        vZ = lastZVelocity + zAcceleration;
 
     }
 
@@ -24,12 +44,48 @@ public class DataPoint {
         return t;
     }
 
-    public double getVelocity() {
-        return v;
+    public double getXVelocity() {
+        return vX;
     }
 
+    public double getYVelocity() {
+        return vY;
+    }
+
+    public double getZVelocity() {
+        return vZ;
+    }
+
+    /**
+     * Returns the vector sum of all three velocities, in m/s
+     * pre: none
+     * post: vector sum of velocities returned
+     * @return vector sum of velocities
+     */
+    public double getVelocity() {
+        return Math.sqrt(vX*vX + vY*vY + vZ*vZ);
+    }
+
+    public double getXAcceleration() {
+        return aX;
+    }
+
+    public double getYAcceleration() {
+        return aY;
+    }
+
+    public double getZAcceleration() {
+        return aZ;
+    }
+
+    /**
+     * Returns the vector sum of all three accelerations, in m/(s*s)
+     * pre: none
+     * post: vector sum of accelerations returned
+     * @return vector sum of accelerations
+     */
     public double getAcceleration() {
-        return a;
+        return Math.sqrt(aX*aX + aY*aY + aZ*aZ);
     }
 
 }

@@ -1,9 +1,13 @@
 package com.example.d.culminatingproject;
 
+import android.content.Context;
+import android.hardware.Sensor;
+
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
+ * Stores all the data from one recording.
  * Created by D on 2017-01-20.
  */
 
@@ -12,12 +16,13 @@ public class DataSet implements Comparable {
     private Date initialTime;
     private ArrayList<DataPoint> dataPoints;
     private boolean isFinished;
+    private Sensor accel;
 
     public DataSet() {
-
+        //getSystemService(Context.SENSOR_SERVICE);
         initialTime = new Date();
         dataPoints = new ArrayList<>();
-
+        dataPoints.add(new DataPoint(System.currentTimeMillis(), 0, 0, 0, 0, 0, 0));
     }
 
     /**
@@ -26,10 +31,13 @@ public class DataSet implements Comparable {
      * pre: none
      * post: new data point added to the set of points
      */
-    public void retrieveNextDataPoint() {
+    public void establishNextDataPoint(double xAcceleration, double yAcceleration, double zAcceleration) {
 
         if (!isFinished) {
-            DataPoint newPoint = new DataPoint(System.currentTimeMillis(),0.0,0.0);
+            DataPoint last = dataPoints.get(dataPoints.size()-1);
+            DataPoint newPoint = new DataPoint(System.currentTimeMillis(),
+                    xAcceleration, yAcceleration, zAcceleration,
+                    last.getXVelocity(), last.getYVelocity(), last.getZVelocity());
             dataPoints.add(newPoint);
         }
 
@@ -82,16 +90,24 @@ public class DataSet implements Comparable {
      * this DataSet or to compare it to other DataSets.
      * pre: none
      * post: timestamp returned
-     * @return
+     * @return the timestamp
      */
     public Date getTimestamp() {
         return initialTime;
     }
 
+    /**
+     * Returns the amount of time over which data was taken, in milliseconds
+     * @return the amount of time over which data was taken, in milliseconds
+     */
     public long getTimeElapsedMillis() {
         return ((dataPoints.get(dataPoints.size()-1)).getTime() - (dataPoints.get(0)).getTime());
     }
 
+    /**
+     * Returns the amount of time over which data was taken, in seconds
+     * @return the amount of time over which data was taken, in seconds
+     */
     public double getTimeElapsedSeconds() {
         return (((double)getTimeElapsedMillis())/1000);
     }
@@ -145,7 +161,7 @@ public class DataSet implements Comparable {
     /**
      * Makes sure that this DataSet can no longer record new information
      * pre: none
-     * post: retrieveNextDataPoint() will no longer do anything for this DataSet.
+     * post: establishNextDataPoint() will no longer do anything for this DataSet.
      */
     public void finish() {
         isFinished = true;
