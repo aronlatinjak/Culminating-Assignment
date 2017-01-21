@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Physics Tracker</string>
     <string name="history_title">History</string>
+    <string name="settings_title">Settings</string>
+    <string name="statistics_title">Statistics</string>
+    <string name="help_title">Help</string>
 </resources>

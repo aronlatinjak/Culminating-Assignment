@@ -1,5 +1,6 @@
 package com.example.d.culminatingproject;
 
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,24 +13,25 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        // Set up back button ont eh actionbar
-        android.app.ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        // Puts a back button in the top bar
+        ActionBar actionBar = getSupportActionBar();
+        try {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+            System.err.println("Something went wrong.\n" + e.getMessage());
+        }
 
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch(item.getItemId()) {
-            // The app icon has been clicked
-            case R.id.home:
-                this.finish();
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
                 return true;
-            default:
-                return false;
         }
-
+        return super.onOptionsItemSelected(item);
     }
 
 }
