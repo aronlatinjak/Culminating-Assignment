@@ -12,14 +12,4 @@ import android.widget.ImageView;
 
 @Deprecated
 public class Graph {
-
-    private double[] ys;
-    private long[] xs;
-
-    @Deprecated
-    public void Graph(long[] xPoints, double[] yPoints) {
-        xs = xPoints;
-        ys = yPoints;
-    }
-
 }

@@ -8,20 +8,20 @@ import java.sql.Time;
  */
 public class DataPoint {
 
-    private Time time;
+    private long t;
     private double v;
     private double a;
 
-    public void DataPoint(Time t, double velocity, double acceleration) {
+    public DataPoint(long time, double velocity, double acceleration) {
 
-        time = t;
+        t =time;
         v = velocity;
         a = acceleration;
 
     }
 
-    public Time getTime() {
-        return time;
+    public long getTime() {
+        return t;
     }
 
     public double getVelocity() {
