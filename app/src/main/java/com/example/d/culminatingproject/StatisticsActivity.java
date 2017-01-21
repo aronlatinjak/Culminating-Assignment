@@ -30,7 +30,6 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
     private Sensor accel;
     private DataSet dataSet;
     private Timer timer;
-    //private int establishAccuracyCounter;
 
     // GUI elements
     private Switch velAccelSwitch;
@@ -56,10 +55,6 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
             System.err.println("Something went wrong.\n" + e.getMessage());
         }
 
-        // Establish accuracy counter discards the first couple pieces of data,
-        // giving the low-pass filter time to adjust.
-        //establishAccuracyCounter = 20;
-
         // Used to store the data recorded
         dataSet = new DataSet();
 
@@ -70,15 +65,15 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         // I tried the linear acceleration to remove the effects of gravity, but it didn't work
         // so I stuck to using an equation provided by the android reference site
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        accel = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
         // Access the switch, which alternates between velocity time and position time
         velAccelSwitch = (Switch) findViewById(R.id.switchVelocityPosition);
 
         // Access some of the labels
         graphTitle = (TextView) findViewById(R.id.tvGraphTitle);
-        maxVelocityView = (TextView) findViewById(R.id.tvVelocity);
-        maxAccelerationView = (TextView) findViewById(R.id.tvDisplacement);
+        maxVelocityView = (TextView) findViewById(R.id.tvMaxVelocity);
+        maxAccelerationView = (TextView) findViewById(R.id.tvMaxAccel);
         timeElapsedView = (TextView) findViewById(R.id.tvTime);
 
         // Access the graph
@@ -233,16 +228,10 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
         gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
 
-        //establishAccuracyCounter = establishAccuracyCounter > 0? establishAccuracyCounter-1: -1;
-
-        if (/*establishAccuracyCounter == -1*/true) {
-            // Add next data point to the DataSet; I integrated part of the low-pass filter
-            // into this step
-            dataSet.establishNextDataPoint(
-                    event.values[0] - gravity[0],
-                    event.values[1] - gravity[1],
-                    event.values[2] - gravity[2]);
-        }
+        dataSet.establishNextDataPoint(
+                event.values[0] - gravity[0],
+                event.values[1] - gravity[1],
+                event.values[2] - gravity[2]);
     }
 
     @Override

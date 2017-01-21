@@ -37,13 +37,13 @@ public class DataSet implements Comparable {
 
         if (!isFinished) {
             if(dataPoints.isEmpty()) {
-                DataPoint newPoint = new DataPoint(System.currentTimeMillis(),
+                DataPoint newPoint = new DataPoint(System.currentTimeMillis(),System.currentTimeMillis(),
                         xAcceleration, yAcceleration, zAcceleration,
                         0, 0, 0);
                 dataPoints.add(newPoint);
             } else {
                 DataPoint last = dataPoints.get(dataPoints.size() - 1);
-                DataPoint newPoint = new DataPoint(System.currentTimeMillis(),
+                DataPoint newPoint = new DataPoint(System.currentTimeMillis(),last.getTime(),
                         xAcceleration, yAcceleration, zAcceleration,
                         last.getXVelocity(), last.getYVelocity(), last.getZVelocity());
                 dataPoints.add(newPoint);

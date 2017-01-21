@@ -28,7 +28,7 @@ public class DataPoint {
      * @param lastYVelocity last calculated y velocity in m/s, used to calculate current y velocity
      * @param lastZVelocity last calculated z velocity in m/s, used to calculate current z velocity
      */
-    public DataPoint(long time,
+    public DataPoint(long time, long lastTime,
                      double xAcceleration, double yAcceleration, double zAcceleration,
                      double lastXVelocity, double lastYVelocity, double lastZVelocity) {
 
@@ -36,9 +36,10 @@ public class DataPoint {
         aX = xAcceleration;
         aY = yAcceleration;
         aZ = zAcceleration;
-        vX = lastXVelocity + xAcceleration;
-        vY = lastYVelocity + yAcceleration;
-        vZ = lastZVelocity + zAcceleration;
+        vX = lastXVelocity + ((double)(time-lastTime)/1000)*xAcceleration;
+        vY = lastYVelocity + ((double)(time-lastTime)/1000)*yAcceleration;
+        vZ = lastZVelocity + ((double)(time-lastTime)/1000)*zAcceleration;
+        System.out.println("" + vX + " " + vY + " " + vZ);
 
     }
 
