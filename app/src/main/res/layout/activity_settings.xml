@@ -22,7 +22,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tvUnits"
-        android:layout_weight="0.04" />
+        android:layout_weight="0.04"
+        android:textColor="@color/colorTextTitle"
+        android:textStyle="normal|bold" />
 
     <Switch
         android:text="Velocity (m/s or km/h)"
@@ -51,21 +53,23 @@
         android:layout_weight="0.20" />
 
     <TextView
-        android:text="Frequency"
+        android:text="Tracker Refresh Rate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tvFrequency"
-        android:layout_weight="0.04" />
+        android:layout_weight="0.04"
+        android:textColor="@color/colorTextTitle"
+        android:textStyle="normal|bold" />
 
     <CheckBox
-        android:text="Low Refresh Rate (Lower Power Usage)"
+        android:text="Low Frequency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cbLowRefresh"
         android:layout_weight="0.04" />
 
     <CheckBox
-        android:text="Medium Refresh Rate"
+        android:text="Medium Frequency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cbMediumRefresh"
@@ -73,7 +77,7 @@
         android:checked="true" />
 
     <CheckBox
-        android:text="High Refresh Rate (High Power Usage)"
+        android:text="High Frequency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cbHighRefresh"

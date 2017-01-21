@@ -36,7 +36,8 @@
                 android:layout_weight="25"
                 android:gravity="center"
                 android:textStyle="normal|bold"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:textColor="@color/colorTextTitle" />
         </LinearLayout>
 
         <com.jjoe64.graphview.GraphView
