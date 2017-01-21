@@ -1,6 +1,5 @@
 package com.example.d.culminatingproject;
 
-import android.content.Context;
 import android.hardware.Sensor;
 
 import java.util.ArrayList;
@@ -16,8 +15,12 @@ public class DataSet implements Comparable {
     private Date initialTime;
     private ArrayList<DataPoint> dataPoints;
     private boolean isFinished;
-    private Sensor accel;
 
+    /**
+     * Creates a new empty data set. Assumes an initial velocity and acceleration of 0
+     * pre: none
+     * post: new DataSet created
+     */
     public DataSet() {
         //getSystemService(Context.SENSOR_SERVICE);
         initialTime = new Date();
@@ -132,7 +135,7 @@ public class DataSet implements Comparable {
      */
     public double[] getTimes() {
         double[] times = new double[dataPoints.size()];
-        for (int i = 0; i < dataPoints.size(); i++) {
+        for (int i = 0; i < times.length; i++) {
             times[i] = ((double)(dataPoints.get(i).getTime()-dataPoints.get(0).getTime()))/1000;
         }
         return times;
@@ -144,7 +147,7 @@ public class DataSet implements Comparable {
      */
     public double[] getSpeeds() {
         double[] speeds = new double[dataPoints.size()];
-        for (int i = 0; i < dataPoints.size(); i++) {
+        for (int i = 0; i < speeds.length; i++) {
             speeds[i] = dataPoints.get(i).getVelocity();
         }
         return speeds;
@@ -152,7 +155,7 @@ public class DataSet implements Comparable {
 
     public double[] getAccelerations() {
         double[] accelerations = new double[dataPoints.size()];
-        for (int i = 0; i < dataPoints.size(); i++) {
+        for (int i = 0; i < accelerations.length; i++) {
             accelerations[i] = dataPoints.get(i).getAcceleration();
         }
         return accelerations;

@@ -26,6 +26,8 @@
         <activity
             android:name=".StatisticsActivity"
             android:label="@string/statistics_title"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation"
             android:parentActivityName=".MainMenuActivity">
             <!--This tag does the same thing as the parent activity name, but it
             works for older devices-->

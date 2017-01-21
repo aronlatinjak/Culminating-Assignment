@@ -17,20 +17,22 @@ public class DataPoint {
     private double aZ;
 
     /**
-     * Used to store a set of data.
-     * @param time
-     * @param xAcceleration
-     * @param yAcceleration
-     * @param zAcceleration
-     * @param lastXVelocity
-     * @param lastYVelocity
-     * @param lastZVelocity
+     * Used to store a set of data taken from the accelerometer.
+     * pre: values don't overflow double or long
+     * post: new DataPoint created
+     * @param time system time
+     * @param xAcceleration device's x acceleration, in m/(s*s)
+     * @param yAcceleration device's y acceleration, in m/(s*s)
+     * @param zAcceleration device's z acceleration, in m/(s*s)
+     * @param lastXVelocity last calculated x velocity in m/s, used to calculate current x velocity
+     * @param lastYVelocity last calculated y velocity in m/s, used to calculate current y velocity
+     * @param lastZVelocity last calculated z velocity in m/s, used to calculate current z velocity
      */
     public DataPoint(long time,
                      double xAcceleration, double yAcceleration, double zAcceleration,
                      double lastXVelocity, double lastYVelocity, double lastZVelocity) {
 
-        t =time;
+        t = time;
         aX = xAcceleration;
         aY = yAcceleration;
         aZ = zAcceleration;
@@ -40,6 +42,12 @@ public class DataPoint {
 
     }
 
+    /**
+     * Returns the system time, in millis, of this DataPoint
+     * pre: none
+     * post: time, in millis, returned
+     * @return time in millis
+     */
     public long getTime() {
         return t;
     }

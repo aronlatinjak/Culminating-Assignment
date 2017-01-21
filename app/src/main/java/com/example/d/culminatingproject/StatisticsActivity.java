@@ -20,7 +20,6 @@ import java.util.TimerTask;
 
 public class StatisticsActivity extends AppCompatActivity implements SensorEventListener {
 
-    private int count;
     private LineGraphSeries<DataPoint> points;
     private GraphView graphView;
     private SensorManager sensorManager;
@@ -41,15 +40,12 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
             System.err.println("Something went wrong.\n" + e.getMessage());
         }
 
-
-        // Used in the dummy real-time graphing
-        count = 0;
-
+        dataSet = new DataSet();
 
         // Access the accelerometer
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         // using linear accelerometer to ignore acceleration due
-        accel = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         // Access the graph
         graphView = (GraphView) findViewById(R.id.data_graph);
@@ -57,26 +53,24 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         // Makes sure that the user always sees the data from beginning to end
         graphView.getViewport().setXAxisBoundsManual(true);
         graphView.getViewport().setMinX(0);
-        graphView.getViewport().setMaxX(count);
+        graphView.getViewport().setMaxX(0);
 
         // Used to store the data for the graph
-        points = new LineGraphSeries<>(new DataPoint[] {
-            new DataPoint(0,1),
-        });
+        points = new LineGraphSeries<>(new DataPoint[] {new DataPoint(0,0)});
 
         // Attach the data to the graph
         graphView.addSeries(points);
 
-        // Used for the dummy to generate new points
+        // Used to redraw the graph
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                generateNewPoint();
+                refreshGraph();
             }
         };
 
         timer = new Timer();
-        timer.schedule(timerTask, 1000, 1000);
+        timer.schedule(timerTask, 250, 250);
 
     }
 
@@ -93,14 +87,35 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
     }
 
     /**
-     * Testing for updating the graph in real time.
+     * Updates the graph with the new information from the DataSet
+     * pre: none
+     * post: graph updated
      */
-    public void generateNewPoint() {
-        Random r = new Random();
-        count++;
-        DataPoint dp = new DataPoint(count, r.nextInt(50));
-        points.appendData(dp, true, 1000);
-        graphView.getViewport().setMaxX(count);
+    public void refreshGraph() {
+        // TODO:
+        /*
+        switch() {
+            case SPEED:
+                break;
+            case ACCELERATION:
+                break;
+            default:
+                break;
+        }*/
+
+        // Get all the current speeds and times
+        double[] accels = dataSet.getAccelerations();
+        double[] times = dataSet.getTimes();
+
+        DataPoint[] freshPoints = new DataPoint[accels.length];
+        for (int i = 0; i < freshPoints.length; i++) {
+            freshPoints[i] = new DataPoint(times[i], accels[i]);
+        }
+
+        // swap out the old DataPoints with the new ones
+        points.resetData(freshPoints);
+        graphView.getViewport().setMaxX(times[times.length-1]);
+
     }
 
     /**
@@ -130,12 +145,13 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
 
     /**
      * When the device gets new information from the accelerometer, send it to the DataSet
-     * @param event
+     * @param event the event that the accelerometer generates
      */
     @Override
     public void onSensorChanged(SensorEvent event) {
         float[] tokens = event.values;
-
+        //float x = tokens[0];
+        dataSet.establishNextDataPoint(tokens[0],tokens[1],tokens[2]);
     }
 
     @Override
