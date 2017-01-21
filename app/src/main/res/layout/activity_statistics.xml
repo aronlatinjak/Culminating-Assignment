@@ -34,7 +34,7 @@
 
                 <TextView
                     android:text="Velocity vs Time"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:id="@+id/tvGraphTitle"
                     android:gravity="center"
                     android:textStyle="normal|bold"
@@ -103,14 +103,14 @@
                 android:text="Statistics"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView4"
+                android:id="@+id/tvStatistics"
                 android:textSize="17sp" />
 
             <TextView
                 android:text="Velocity:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView5"
+                android:id="@+id/tvVelocity"
                 android:textSize="16sp"
                 android:textIsSelectable="false" />
 
@@ -118,7 +118,7 @@
                 android:text="Time:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView6"
+                android:id="@+id/tvTime"
                 android:textSize="16sp"
                 android:textIsSelectable="false" />
 
@@ -126,7 +126,7 @@
                 android:text="Displacement:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView7"
+                android:id="@+id/tvDisplacement"
                 android:textSize="16sp"
                 android:textIsSelectable="false" />
         </LinearLayout>

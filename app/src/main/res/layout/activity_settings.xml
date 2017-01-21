@@ -48,7 +48,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/switchTime"
-        android:layout_weight="0.04" />
+        android:layout_weight="0.04"
+        android:checked="false" />
 
     <Space
         android:layout_width="match_parent"
@@ -68,22 +69,22 @@
         android:text="Low Frequency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cbLowRefresh"
+        android:id="@+id/cbRefreshLow"
         android:layout_weight="0.04" />
 
     <CheckBox
         android:text="Medium Frequency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cbMediumRefresh"
         android:layout_weight="0.04"
-        android:checked="true" />
+        android:checked="true"
+        android:id="@+id/cbRefreshMedium" />
 
     <CheckBox
         android:text="High Frequency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cbHighRefresh"
+        android:id="@+id/cbRefreshHigh"
         android:layout_weight="0.04" />
 
 </LinearLayout>
