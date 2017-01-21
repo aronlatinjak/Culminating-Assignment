@@ -18,20 +18,27 @@
             </intent-filter>
         </activity>
 
-        <!-- Statistics activity -->
+        <!-- Statistics activity
+                The parent activity name attribute sets the main screen as
+                the one that should be accessed when the back arrow is tapped-->
         <activity
             android:name=".StatisticsActivity"
             android:label="@string/statistics_title"
             android:parentActivityName=".MainMenuActivity">
+            <!--This tag does the same thing as the parent activity name, but it
+            works for older devices-->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.d.culminatingproject.MainMenuActivity" />
         </activity>
 
-        <!-- History activity -->
+        <!-- History activity
+                The window soft input mode attribute makes sure that the
+                keyboard doesn't pop up when this screen is entered-->
         <activity
             android:name=".HistoryActivity"
             android:label="@string/history_title"
+
             android:windowSoftInputMode="stateHidden"
             android:parentActivityName=".MainMenuActivity">
             <meta-data
