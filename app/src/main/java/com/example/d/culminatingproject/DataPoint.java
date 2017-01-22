@@ -1,12 +1,14 @@
 package com.example.d.culminatingproject;
 
-import java.sql.Time;
+
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Stores a single set of data taken from the sensors
  * Created by D on 2017-01-16.
  */
-public class DataPoint {
+public class DataPoint implements Parcelable {
 
     private long t;
     private double vX;
@@ -42,6 +44,28 @@ public class DataPoint {
         System.out.println("" + vX + " " + vY + " " + vZ);
 
     }
+
+    protected DataPoint(Parcel in) {
+        t = in.readLong();
+        vX = in.readDouble();
+        vY = in.readDouble();
+        vZ = in.readDouble();
+        aX = in.readDouble();
+        aY = in.readDouble();
+        aZ = in.readDouble();
+    }
+
+    public static final Creator<DataPoint> CREATOR = new Creator<DataPoint>() {
+        @Override
+        public DataPoint createFromParcel(Parcel in) {
+            return new DataPoint(in);
+        }
+
+        @Override
+        public DataPoint[] newArray(int size) {
+            return new DataPoint[size];
+        }
+    };
 
     /**
      * Returns the system time, in millis, of this DataPoint
@@ -97,4 +121,19 @@ public class DataPoint {
         return Math.sqrt(aX*aX + aY*aY + aZ*aZ);
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(t);
+        dest.writeDouble(vX);
+        dest.writeDouble(vY);
+        dest.writeDouble(vZ);
+        dest.writeDouble(aX);
+        dest.writeDouble(aY);
+        dest.writeDouble(aZ);
+    }
 }

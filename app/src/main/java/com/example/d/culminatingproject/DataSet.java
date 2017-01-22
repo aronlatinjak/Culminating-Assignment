@@ -1,16 +1,21 @@
 package com.example.d.culminatingproject;
 
 import android.hardware.Sensor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 /**
  * Stores all the data from one recording.
+ * Comparable implemented to sort recordings by date
+ * Parcelable recorded to pass recordings around the program
  * Created by D on 2017-01-20.
  */
 
-public class DataSet implements Comparable {
+public class DataSet implements Comparable, Parcelable {
 
     private Date initialTime;
     private ArrayList<DataPoint> dataPoints;
@@ -22,9 +27,21 @@ public class DataSet implements Comparable {
      * post: new DataSet created
      */
     public DataSet() {
-        //getSystemService(Context.SENSOR_SERVICE);
         initialTime = new Date();
         dataPoints = new ArrayList<>();
+    }
+
+    /**
+     * Creates a DataSet from the information of another. Essentially a constructor for cloning a
+     * DataSet.
+     * pre: the DataPoints are in the correct order
+     * post: new DataSet created
+     */
+    private DataSet(DataPoint[] points, Date timestamp, boolean recordingFinished) {
+        dataPoints = new ArrayList<>();
+        Collections.addAll(dataPoints, points);
+        initialTime = timestamp;
+        isFinished = recordingFinished;
     }
 
     /**
@@ -162,6 +179,10 @@ public class DataSet implements Comparable {
         return speeds;
     }
 
+    /**
+     * Returns an array of all the accelerations recorded, in meters per second squared, since the recoding started.
+     * @return an array of all the accelerations recorded, in meters per second squared, since the recoding started
+     */
     public double[] getAccelerations() {
         double[] accelerations = new double[dataPoints.size()];
         for (int i = 0; i < accelerations.length; i++) {
@@ -179,4 +200,44 @@ public class DataSet implements Comparable {
         isFinished = true;
     }
 
+    /**
+     * Don't know what this does, but I need it to pass DataSets between views
+     * @return the integer 0.
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Write all the data of this dataset to a parcel so that it can be sent between views
+     * @param dest the parcel
+     * @param flags don't know what this is
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        DataPoint[] dataPArray = (DataPoint[]) dataPoints.toArray();
+        dest.writeArray(dataPArray);
+        dest.writeValue(initialTime);
+        dest.writeValue(isFinished);
+    }
+
+    /**
+     * This CREATOR is used to reconstitute a parcelled DataSet, for reading it in the new View
+     */
+    public static final Parcelable.Creator<DataSet> CREATOR = new Parcelable.Creator<DataSet>(){
+        @Override
+        public DataSet createFromParcel(Parcel in) {
+            return new DataSet(
+                    (DataPoint[]) in.readArray(ClassLoader.getSystemClassLoader()),
+                    (Date) in.readValue(ClassLoader.getSystemClassLoader()),
+                    (boolean) in.readValue(ClassLoader.getSystemClassLoader())
+            );
+        }
+
+        @Override
+        public DataSet[] newArray(int size) {
+            return new DataSet[size];
+        }
+    };
 }

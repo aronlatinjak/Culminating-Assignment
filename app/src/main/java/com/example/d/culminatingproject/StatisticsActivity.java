@@ -28,6 +28,10 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
     private DataSet dataSet;
     private Timer timer;
 
+    // This variable is used to discard the first couple pieces of data. This helps make sure
+    // that the gravity value adjusts correctly before the recording starts
+    private int accuracyCounter;
+
     // GUI elements
     private Switch velAccelSwitch;
     private GraphView graphView;
@@ -57,10 +61,13 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
 
         // Access the accelerometer. Linear accelerometer automatically removes gravity.
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        accel = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         // Access the switch, which alternates between velocity time and position time
         velAccelSwitch = (Switch) findViewById(R.id.switchVelocityPosition);
+
+        // Set up accuracy counter to discard first 10 results
+        accuracyCounter  = 10;
 
         // Set up the gravity for the low-pass filter for removing gravity from acceleration
         gravity = new float[]{0,0,0};
@@ -233,13 +240,20 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
         gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
 
-        // Add the information to the dataset.
-        dataSet.establishNextDataPoint(
-                event.values[0] - gravity[0],
-                event.values[1] - gravity[1],
-                event.values[2] - gravity[2]);
+        // don't include first 10 pieces of data to make sure sensor is properly adjusted
+        if(accuracyCounter>=0) {
+            accuracyCounter--;
+        } else {
+            // Add the information to the dataset.
+            dataSet.establishNextDataPoint(
+                    event.values[0] - gravity[0],
+                    event.values[1] - gravity[1],
+                    event.values[2] - gravity[2]);
+        }
     }
 
+    // Don't do anythings when accuracy changes; there isn't anything to do
+    // (needed because this implements SensorEventListener)
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
