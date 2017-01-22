@@ -16,10 +16,7 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.*;
 import com.jjoe64.graphview.series.DataPoint;
 
-import org.w3c.dom.Text;
-
 import java.text.DecimalFormat;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -38,8 +35,8 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
     private TextView maxVelocityView;
     private TextView maxAccelerationView;
     private TextView timeElapsedView;
+    private TextView axisView;
 
-    // Used for the low-pass filter
     private float[] gravity;
 
     @Override
@@ -58,23 +55,22 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         // Used to store the data recorded
         dataSet = new DataSet();
 
-        // Initialize the gravity variables for the low-pass filter
-        gravity = new float[]{0,0,0};
-
-        // Access the accelerometer
-        // I tried the linear acceleration to remove the effects of gravity, but it didn't work
-        // so I stuck to using an equation provided by the android reference site
+        // Access the accelerometer. Linear accelerometer automatically removes gravity.
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accel = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
         // Access the switch, which alternates between velocity time and position time
         velAccelSwitch = (Switch) findViewById(R.id.switchVelocityPosition);
 
+        // Set up the gravity for the low-pass filter for removing gravity from acceleration
+        gravity = new float[]{0,0,0};
+
         // Access some of the labels
         graphTitle = (TextView) findViewById(R.id.tvGraphTitle);
         maxVelocityView = (TextView) findViewById(R.id.tvMaxVelocity);
         maxAccelerationView = (TextView) findViewById(R.id.tvMaxAccel);
         timeElapsedView = (TextView) findViewById(R.id.tvTime);
+        axisView = (TextView) findViewById(R.id.tvGraphY);
 
         // Access the graph
         graphView = (GraphView) findViewById(R.id.data_graph);
@@ -102,6 +98,10 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         timer.schedule(timerTask, 250, 250);
 
     }
+
+
+
+
 
     // TODO:
     // Hey aron. could you make the method for saving the data here? thanks.
@@ -135,6 +135,8 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         DataPoint[] freshPoints = new DataPoint[times.length];
         // String for title of graph
         final int titleString;
+        // String for the y-axis of graph
+        final int axisLabel;
 
         // if the switch is to the right
         if(velAccelSwitch.isChecked()) {
@@ -145,6 +147,7 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
             }
             // Set the graph title
             titleString = R.string.at_graph_label;
+            axisLabel = R.string.acceleration_axis_label;
         } else {
             // Get all the velocities
             double[] velocities = dataSet.getSpeeds();
@@ -153,6 +156,7 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
             }
             // Set the graph title
             titleString = R.string.vt_graph_label;
+            axisLabel = R.string.velocity_axis_label;
         }
 
         // swap out the old DataPoints with the new ones
@@ -172,13 +176,14 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
                 graphTitle.setText(titleString);
                 // Set max velocity
                 maxVelocityView.setText(getString(R.string.max_velocity) + ":\t\t\t\t\t\t\t\t" +
-                        df.format(dataSet.getMaxSpeed()) + "m/s");
+                        df.format(dataSet.getMaxSpeed()) + " m/s");
                 // Set max acceleration
                 maxAccelerationView.setText(getString(R.string.max_acceleration) + ":\t\t\t" +
-                        df.format(dataSet.getMaxAcceleration()) + "m/s" + '\u00B2');
+                        df.format(dataSet.getMaxAcceleration()) + " m/s" + '\u00B2');
                 // Set time elapsed
                 timeElapsedView.setText(getString(R.string.time_elapsed) + ":\t\t\t\t\t\t\t\t" +
-                        df.format(dataSet.getTimeElapsedSeconds()) + 's');
+                        df.format(dataSet.getTimeElapsedSeconds()) + " s");
+                axisView.setText(axisLabel);
             }
         });
 
@@ -195,7 +200,7 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
 
         // TODO: implement a switch structure to change the frequency of the requests for the sensor
 
-        sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     /**
@@ -216,10 +221,10 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        // Uses a low-pass filter to remove acceleration due to gravity
-        // This code was taken directly from the android reference website, as I would
-        // have no idea how to do this otherwise.
-        // https://developer.android.com/guide/topics/sensors/sensors_motion.html#sensors-motion-accel
+        // This code is directly taken from the Android website.
+        // I used it since the linear accelerometer doesn't seem to work correctly.
+        // Without borrowing this code, I would have had no idea how to do this.
+        // https://developer.android.com/guide/topics/sensors/sensors_motion.html
 
         final float alpha = 0.8F;
 
@@ -228,6 +233,7 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
         gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
 
+        // Add the information to the dataset.
         dataSet.establishNextDataPoint(
                 event.values[0] - gravity[0],
                 event.values[1] - gravity[1],

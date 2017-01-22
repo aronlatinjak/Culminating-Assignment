@@ -9,5 +9,7 @@
     <string name="max_velocity">Max Velocity</string>
     <string name="max_acceleration">Max Acceleration</string>
     <string name="time_elapsed">Time Elapsed</string>
+    <string name="velocity_axis_label">Velocity (m/s)</string>
+    <string name="acceleration_axis_label">Acceleration (m/s&#178;)</string>
 
 </resources>
