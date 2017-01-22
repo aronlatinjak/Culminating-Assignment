@@ -8,6 +8,8 @@ import android.view.MenuItem;
 
 public class HistoryActivity extends AppCompatActivity {
 
+    DataSet[] pastRecordings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +22,11 @@ public class HistoryActivity extends AppCompatActivity {
         } catch (NullPointerException e) {
             System.err.println("Something went wrong.\n" + e.getMessage());
         }
+
+        //
+        pastRecordings = SaveStaticClass.readSaves(getApplicationContext());
+
+
 
     }
 
