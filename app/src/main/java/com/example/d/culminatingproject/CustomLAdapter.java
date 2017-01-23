@@ -7,23 +7,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ListAdapter;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 /**
+ * Extends the array adapter to allow a ListView to be created with a DataSet array.
+ * Adds the functionality of the individual items in the list, such as the text and the buttons.
  * Created by D on 2017-01-23.
  */
 
-public class CustomLAdapter extends ArrayAdapter<DataSet> {
+class CustomLAdapter extends ArrayAdapter<DataSet> {
 
-    DataSet[] data;
+    private DataSet[] data;
+    private boolean[] isCheckedArray;
 
-    public CustomLAdapter(Context context, DataSet[] dataSets) {
+    CustomLAdapter(Context context, DataSet[] dataSets) {
         super(context, R.layout.listviewrow_custom, dataSets);
         data = dataSets;
+
+        // Keeps track of the state of the check boxes
+        isCheckedArray = new boolean[dataSets.length];
+        for (boolean b: isCheckedArray) b = false;
     }
 
+    /**
+     * Set up the functionality of the list items
+     * @param position position of list item in list
+     * @param convertView don't know what this does
+     * @param parent parent ViewGroup
+     * @return the view for the list element
+     */
+    @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -46,7 +61,18 @@ public class CustomLAdapter extends ArrayAdapter<DataSet> {
             }
         });
 
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isCheckedArray[accessiblePosition] = isChecked;
+            }
+        });
+
         return customView;
+    }
+
+    public boolean getIsChecked(int position) {
+        return isCheckedArray[position];
     }
 
 }

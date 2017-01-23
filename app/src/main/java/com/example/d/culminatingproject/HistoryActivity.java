@@ -1,7 +1,9 @@
 package com.example.d.culminatingproject;
 
+import android.content.DialogInterface;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -21,6 +23,9 @@ public class HistoryActivity extends AppCompatActivity {
 
 
     DataSet[] pastRecordings;
+
+    // The all-essential ListAdapter
+    CustomLAdapter listAdapter;
 
     // GUI elements
     private ListView listView;
@@ -55,21 +60,117 @@ public class HistoryActivity extends AppCompatActivity {
             }
         });
 
+
+
         // Access the ListView
         listView = (ListView) findViewById(R.id.listView);
 
-        // Get all the past recordings
-        pastRecordings = SaveStaticClass.readSaves(getApplicationContext());
-        pastRecordings = new DataSet[]{new DataSet(new DataPoint[]{new DataPoint(0,0,0,0,0,0,0,0)}, new Date(), true)};
+        // Load the ♪ Lizst ♪ (note: actually loads the list, not the composer Lizst) //
+        reloadListItems();
 
-        String[] stuff = {"Recording 1", "Recording 2", "Recording 3", "Recording 4"};
+        // Set up the delete button; It should delete all the recordings with check boxes beside them
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        ListAdapter listAdapter = new CustomLAdapter(this, pastRecordings);
+                // For now, just count the number of items to delete
+                int numToDeleteCounter = 0;
+                for (int i = 0; i < pastRecordings.length; i++) {
+                    if (listAdapter.getIsChecked(i)) numToDeleteCounter++;
+                }
 
-        listView.setAdapter(listAdapter);
+                final int numToDelete = numToDeleteCounter;
+
+                AlertDialog.Builder aDB = new AlertDialog.Builder(HistoryActivity.this);
+
+                // Set the message for the alert box (all the fancy question marks are just to
+                // adjust grammar to if there is one ore multiple items to delete)
+                aDB.setMessage("Are you sure that you would like to delete " + (numToDelete>1?"these " +
+                        numToDelete + " recordings?":"this recording?"));
+
+                // If yes is selected in the alert box
+                aDB.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Alert the user that the recordings are being deleted
+                        Toast.makeText(getApplicationContext(), "Deleting " + numToDelete +
+                                " recordings...", Toast.LENGTH_LONG).show();
+
+                        // Reload the list of items
+                        reloadListItems();
+                    }
+                });
+
+                // If no is selected in the alert box
+                aDB.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //do nothing
+                    }
+                });
+
+                // Send the alert box to the screen
+                AlertDialog alertDialog = aDB.create();
+                alertDialog.show();
+
+            }
+        });
+
+        // Set up the download button; it will download all the recordings selected as a .csv file
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // For now, just count the number of recordings to download
+                int numToDownloadCounter = 0;
+                for (int i = 0; i < pastRecordings.length; i++) {
+                    if (listAdapter.getIsChecked(i)) numToDownloadCounter++;
+                }
+
+                final int numToDownload = numToDownloadCounter;
+
+                AlertDialog.Builder aDB = new AlertDialog.Builder(HistoryActivity.this);
+
+                // Set the message for the alert box
+                if (numToDownload>1){
+                    aDB.setMessage("Are you sure that you would like to download these " +
+                            numToDownload + " recordings as .csv files?");
+                } else {
+                    aDB.setMessage("Are you sure that you would like to download this recording " +
+                            "as a .csv file?");
+                }
+
+                // If yes is selected in the alert box
+                aDB.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Alert the user that the recordings are being downloaded
+                        Toast.makeText(getApplicationContext(), "Downloading " + numToDownload +
+                                " recordings...", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                // If no is selected in the alert box
+                aDB.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //do nothing
+                    }
+                });
+
+                // Send the alert box to the screen
+                AlertDialog alertDialog = aDB.create();
+                alertDialog.show();
+            }
+        });
 
     }
 
+    /**
+     * For the back button.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -79,6 +180,30 @@ public class HistoryActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Reloads the list and the items contained within. Called when the list is initially set up
+     * and when items in the list are deleted.
+     * pre: none
+     * post: ListView refreshed
+     */
+    public void reloadListItems() {
+        // Get all the past recordings
+        pastRecordings = SaveStaticClass.readSaves(getApplicationContext());
+
+        // Adding dummy data since SaveStaticClass isn't set up yet
+        pastRecordings = new DataSet[]{
+                new DataSet(new DataPoint[]{new DataPoint(0,0,0,0,0,0,0,0)}, new Date(), true),
+                new DataSet(new DataPoint[]{new DataPoint(1,0,0,0,0,0,0,0)}, new Date(), true),
+                new DataSet(new DataPoint[]{new DataPoint(2,0,0,0,0,0,0,0)}, new Date(), true)
+        };
+
+        // Set up the adapter that puts things in the list correctly
+        listAdapter = new CustomLAdapter(this, pastRecordings);
+
+        // Set the adapter of the list to the newly created custom adapter
+        listView.setAdapter(listAdapter);
     }
 
 }

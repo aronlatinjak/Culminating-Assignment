@@ -205,7 +205,7 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
 
         // TODO: implement a switch structure to change the frequency of the requests for the sensor
 
-        sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     /**
