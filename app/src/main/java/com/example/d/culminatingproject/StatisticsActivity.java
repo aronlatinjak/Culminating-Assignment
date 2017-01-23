@@ -50,10 +50,8 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
 
         // Puts a back button in the top bar
         ActionBar actionBar = getSupportActionBar();
-        try {
+        if (actionBar !=null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-        } catch (NullPointerException e) {
-            System.err.println("Something went wrong.\n" + e.getMessage());
         }
 
         // Used to store the data recorded

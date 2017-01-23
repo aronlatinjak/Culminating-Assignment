@@ -15,6 +15,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.Date;
+
 public class HistoryActivity extends AppCompatActivity {
 
 
@@ -33,10 +35,8 @@ public class HistoryActivity extends AppCompatActivity {
 
         // Puts a back button in the top bar
         ActionBar actionBar = getSupportActionBar();
-        try {
+        if (actionBar !=null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-        } catch (NullPointerException e) {
-            System.err.println("Something went wrong.\n" + e.getMessage());
         }
 
         // Access the buttons
@@ -49,7 +49,9 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                if(getCurrentFocus()!=null) {
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
             }
         });
 
@@ -58,26 +60,13 @@ public class HistoryActivity extends AppCompatActivity {
 
         // Get all the past recordings
         pastRecordings = SaveStaticClass.readSaves(getApplicationContext());
+        pastRecordings = new DataSet[]{new DataSet(new DataPoint[]{new DataPoint(0,0,0,0,0,0,0,0)}, new Date(), true)};
 
         String[] stuff = {"Recording 1", "Recording 2", "Recording 3", "Recording 4"};
 
-        ListAdapter listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stuff);
+        ListAdapter listAdapter = new CustomLAdapter(this, pastRecordings);
 
         listView.setAdapter(listAdapter);
-
-        // When a list element is clicked
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Send them to the statistics view, but pass the existing DataSet and don't continue recording
-                String /*Set to DataSet later*/ toPass = String.valueOf(parent.getItemAtPosition(position));
-                String output = "You clicked element #" + position + ", "+ toPass;
-
-                // Makes the alert box appear
-                Toast.makeText(HistoryActivity.this, output, Toast.LENGTH_LONG).show();
-            }
-        });
-
 
     }
 

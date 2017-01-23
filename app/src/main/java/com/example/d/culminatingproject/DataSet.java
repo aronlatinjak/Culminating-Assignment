@@ -37,7 +37,7 @@ public class DataSet implements Comparable, Parcelable {
      * pre: the DataPoints are in the correct order
      * post: new DataSet created
      */
-    private DataSet(DataPoint[] points, Date timestamp, boolean recordingFinished) {
+    public DataSet(DataPoint[] points, Date timestamp, boolean recordingFinished) {
         dataPoints = new ArrayList<>();
         Collections.addAll(dataPoints, points);
         initialTime = timestamp;
