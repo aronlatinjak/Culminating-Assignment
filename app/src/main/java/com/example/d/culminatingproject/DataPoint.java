@@ -11,12 +11,12 @@ import android.os.Parcelable;
 public class DataPoint implements Parcelable {
 
     private long t;
-    private double vX;
-    private double vY;
-    private double vZ;
-    private double aX;
-    private double aY;
-    private double aZ;
+    private float vX;
+    private float vY;
+    private float vZ;
+    private float aX;
+    private float aY;
+    private float aZ;
 
     /**
      * Used to store a set of data taken from the accelerometer.
@@ -31,28 +31,27 @@ public class DataPoint implements Parcelable {
      * @param lastZVelocity last calculated z velocity in m/s, used to calculate current z velocity
      */
     public DataPoint(long time, long lastTime,
-                     double xAcceleration, double yAcceleration, double zAcceleration,
-                     double lastXVelocity, double lastYVelocity, double lastZVelocity) {
+                     float xAcceleration, float yAcceleration, float zAcceleration,
+                     float lastXVelocity, float lastYVelocity, float lastZVelocity) {
 
         t = time;
         aX = xAcceleration;
         aY = yAcceleration;
         aZ = zAcceleration;
-        vX = lastXVelocity + ((double)(time-lastTime)/1000)*xAcceleration;
-        vY = lastYVelocity + ((double)(time-lastTime)/1000)*yAcceleration;
-        vZ = lastZVelocity + ((double)(time-lastTime)/1000)*zAcceleration;
-        System.out.println("" + vX + " " + vY + " " + vZ);
+        vX = lastXVelocity + ((float)(time-lastTime)/1000)*xAcceleration;
+        vY = lastYVelocity + ((float)(time-lastTime)/1000)*yAcceleration;
+        vZ = lastZVelocity + ((float)(time-lastTime)/1000)*zAcceleration;
 
     }
 
     protected DataPoint(Parcel in) {
         t = in.readLong();
-        vX = in.readDouble();
-        vY = in.readDouble();
-        vZ = in.readDouble();
-        aX = in.readDouble();
-        aY = in.readDouble();
-        aZ = in.readDouble();
+        vX = in.readFloat();
+        vY = in.readFloat();
+        vZ = in.readFloat();
+        aX = in.readFloat();
+        aY = in.readFloat();
+        aZ = in.readFloat();
     }
 
     public static final Creator<DataPoint> CREATOR = new Creator<DataPoint>() {
@@ -77,15 +76,15 @@ public class DataPoint implements Parcelable {
         return t;
     }
 
-    public double getXVelocity() {
+    public float getXVelocity() {
         return vX;
     }
 
-    public double getYVelocity() {
+    public float getYVelocity() {
         return vY;
     }
 
-    public double getZVelocity() {
+    public float getZVelocity() {
         return vZ;
     }
 
@@ -95,19 +94,19 @@ public class DataPoint implements Parcelable {
      * post: vector sum of velocities returned
      * @return vector sum of velocities
      */
-    public double getVelocity() {
-        return Math.sqrt(vX*vX + vY*vY + vZ*vZ);
+    public float getVelocity() {
+        return (float)Math.sqrt(vX*vX + vY*vY + vZ*vZ);
     }
 
-    public double getXAcceleration() {
+    public float getXAcceleration() {
         return aX;
     }
 
-    public double getYAcceleration() {
+    public float getYAcceleration() {
         return aY;
     }
 
-    public double getZAcceleration() {
+    public float getZAcceleration() {
         return aZ;
     }
 
@@ -117,8 +116,8 @@ public class DataPoint implements Parcelable {
      * post: vector sum of accelerations returned
      * @return vector sum of accelerations
      */
-    public double getAcceleration() {
-        return Math.sqrt(aX*aX + aY*aY + aZ*aZ);
+    public float getAcceleration() {
+        return (float)Math.sqrt(aX*aX + aY*aY + aZ*aZ);
     }
 
     @Override
@@ -129,11 +128,11 @@ public class DataPoint implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(t);
-        dest.writeDouble(vX);
-        dest.writeDouble(vY);
-        dest.writeDouble(vZ);
-        dest.writeDouble(aX);
-        dest.writeDouble(aY);
-        dest.writeDouble(aZ);
+        dest.writeFloat(vX);
+        dest.writeFloat(vY);
+        dest.writeFloat(vZ);
+        dest.writeFloat(aX);
+        dest.writeFloat(aY);
+        dest.writeFloat(aZ);
     }
 }

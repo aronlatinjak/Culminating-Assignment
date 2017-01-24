@@ -1,11 +1,14 @@
 package com.example.d.culminatingproject;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * The main screen for the app, that is shown when the app starts up.
+ */
 public class MainMenuActivity extends AppCompatActivity {
 
     @Override

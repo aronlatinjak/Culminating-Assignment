@@ -4,23 +4,29 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.*;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * The activity open while recording data.
+ */
 public class StatisticsActivity extends AppCompatActivity implements SensorEventListener {
+
+    private static final int GRAPH_REFRESH_RATE = 125;
+    private static final int GRAPH_TIME_RANGE = 30;
 
     private LineGraphSeries<DataPoint> points;
     private SensorManager sensorManager;
@@ -100,7 +106,7 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         };
 
         timer = new Timer();
-        timer.schedule(timerTask, 250, 250);
+        timer.schedule(timerTask, GRAPH_REFRESH_RATE, GRAPH_REFRESH_RATE);
 
     }
 
@@ -168,6 +174,7 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         points.resetData(freshPoints);
         // if there is data, stretch graph to fit it
         if (times.length-1>0) {
+            graphView.getViewport().setMinX(times[times.length-1] - GRAPH_TIME_RANGE);
             graphView.getViewport().setMaxX(times[times.length-1]);
         }
 
