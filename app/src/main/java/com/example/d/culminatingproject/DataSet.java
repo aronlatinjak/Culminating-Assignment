@@ -17,7 +17,7 @@ import java.util.Date;
 public class DataSet implements Comparable, Parcelable {
 
     private Date initialTime;
-    private ArrayList<DataPoint> dataPoints;
+    public ArrayList<DataPoint> dataPoints;
     private boolean isFinished;
 
     /**
