@@ -23,6 +23,10 @@ public class Setting {
         h = hours;
     }
 
+    public Setting() {
+        this(RefreshRate.MEDIUM, false, false);
+    }
+
     public RefreshRate getRefreshRate() {
         return refreshRate;
     }

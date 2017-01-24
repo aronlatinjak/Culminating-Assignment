@@ -5,7 +5,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 
@@ -39,8 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
         velocitySwitch = (Switch) findViewById(R.id.switchVelocity);
         timeSwitch = null;
 
-        // TODO: come up with method that reads current settings
-        s = new Setting(Setting.RefreshRate.MEDIUM, false, false);
+        s = SaveStaticClass.readSettings(getApplicationContext());
 
     }
 
@@ -67,9 +65,12 @@ public class SettingsActivity extends AppCompatActivity {
                         break;
                 }
 
-                /// s = new Setting(newRate, , );
+                s = new Setting(newRate, velocitySwitch.isChecked(),
+                        timeSwitch.isChecked());
 
-                radioGroup.getCheckedRadioButtonId();
+                // TODO: Save settings
+
+                SaveStaticClass.setSettings(s, getApplicationContext());
 
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
