@@ -36,14 +36,7 @@
         android:id="@+id/switchVelocity"
         android:layout_weight="0.04" />
 
-    <Switch
-        android:text="Distance (m or km)"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/switchDistance"
-        android:layout_weight="0.04" />
-
-    <Switch
+        <Switch
         android:text="Time (s or h)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,27 +58,70 @@
         android:textColor="@color/colorTextTitle"
         android:textStyle="normal|bold" />
 
-    <CheckBox
-        android:text="Low Frequency"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/cbRefreshLow"
-        android:layout_weight="0.04" />
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="212dp"
+            android:id="@+id/refreshRadioGroup">
 
-    <CheckBox
-        android:text="Medium Frequency"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.04"
-        android:checked="true"
-        android:id="@+id/cbRefreshMedium" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    <CheckBox
-        android:text="High Frequency"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/cbRefreshHigh"
-        android:layout_weight="0.04" />
+                <TextView
+                    android:text="Slow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView6"
+                    android:layout_weight="1" />
 
-</LinearLayout>
+                <RadioButton
+                    android:text=""
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radioSlow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView9"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:text=""
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radioMedium" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Fast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView5"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:text=""
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radioFast" />
+
+            </LinearLayout>
+
+        </RadioGroup>
+
+    </LinearLayout>
 </RelativeLayout>

@@ -5,12 +5,24 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Switch;
+
+import static com.example.d.culminatingproject.Setting.RefreshRate.FAST;
+import static com.example.d.culminatingproject.Setting.RefreshRate.MEDIUM;
+import static com.example.d.culminatingproject.Setting.RefreshRate.SLOW;
 
 /**
  * Created by Madison on 1/15/2017.
  * Used to change the recording/display settings for the application.
  */
 public class SettingsActivity extends AppCompatActivity {
+
+    RadioGroup radioGroup;
+    Switch velocitySwitch;
+    Switch timeSwitch;
+    Setting s;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +35,13 @@ public class SettingsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        radioGroup = (RadioGroup) findViewById(R.id.refreshRadioGroup);
+        velocitySwitch = (Switch) findViewById(R.id.switchVelocity);
+        timeSwitch = null;
+
+        // TODO: come up with method that reads current settings
+        s = new Setting(Setting.RefreshRate.MEDIUM, false, false);
+
     }
 
     @Override
@@ -30,6 +49,28 @@ public class SettingsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
+
+                Setting.RefreshRate newRate;
+
+                switch (radioGroup.getCheckedRadioButtonId()) {
+                    case R.id.radioSlow:
+                        newRate = SLOW;
+                        break;
+                    case R.id.radioMedium:
+                        newRate = MEDIUM;
+                        break;
+                    case R.id.radioFast:
+                        newRate = FAST;
+                        break;
+                    default:
+                        newRate = MEDIUM;
+                        break;
+                }
+
+                /// s = new Setting(newRate, , );
+
+                radioGroup.getCheckedRadioButtonId();
+
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
         }
