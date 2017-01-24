@@ -1,11 +1,14 @@
 package com.example.d.culminatingproject;
 
+import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 
+/**
+ * Explains how to use the app, and lists the credits for app creation.
+ */
 public class HelpActivity extends AppCompatActivity {
 
     @Override

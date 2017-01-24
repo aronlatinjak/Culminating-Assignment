@@ -1,6 +1,5 @@
 package com.example.d.culminatingproject;
 
-import android.hardware.Sensor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -50,7 +49,7 @@ public class DataSet implements Comparable, Parcelable {
      * pre: none
      * post: new data point added to the set of points
      */
-    public void establishNextDataPoint(double xAcceleration, double yAcceleration, double zAcceleration) {
+    public void establishNextDataPoint(float xAcceleration, float yAcceleration, float zAcceleration) {
 
         if (!isFinished) {
             if(dataPoints.isEmpty()) {

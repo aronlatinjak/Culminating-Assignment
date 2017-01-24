@@ -8,8 +8,8 @@ import android.view.MenuItem;
 
 /**
  * Created by Madison on 1/15/2017.
+ * Used to change the recording/display settings for the application.
  */
-
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
