@@ -128,21 +128,6 @@
                 android:textSize="16sp"
                 android:textIsSelectable="false" />
 
-            <TextView
-                android:text="Velocity:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView3"
-                android:textSize="16sp"
-                android:textIsSelectable="false" />
-
-            <TextView
-                android:text="Min Velocity:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView8"
-                android:textSize="16sp"
-                android:textIsSelectable="false" />
         </LinearLayout>
     </LinearLayout>
 

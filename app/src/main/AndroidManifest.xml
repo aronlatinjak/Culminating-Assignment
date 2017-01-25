@@ -70,6 +70,16 @@
                 android:value="com.example.d.culminatingproject.MainMenuActivity" />
         </activity>
 
+        <!-- HistoryView activity -->
+        <activity
+            android:name=".HistoryViewActivity"
+            android:label="@string/help_title"
+            android:parentActivityName=".HistoryActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.d.culminatingproject.HistoryActivity" />
+        </activity>
+
     </application>
 
 </manifest>

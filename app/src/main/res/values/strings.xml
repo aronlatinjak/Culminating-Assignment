@@ -4,6 +4,7 @@
     <string name="settings_title">Settings</string>
     <string name="statistics_title">Statistics</string>
     <string name="help_title">Help</string>
+    <string name="historyview_title">Past Recording</string>
     <string name="vt_graph_label">Velocity Time Graph</string>
     <string name="at_graph_label">Acceleration Time Graph</string>
     <string name="max_velocity">Max Velocity</string>

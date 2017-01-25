@@ -49,6 +49,12 @@ public class SaveStaticClass {
     }
 
     /**
+     * Dummy method for exporting a recording to dowloads folder as a .csv file
+     * @param context
+     */
+    public static void exportAsCsv(Context context, DataSet dataSet) {};
+
+    /**
      * Returns the settings from the settings file
      * @param context
      * @return

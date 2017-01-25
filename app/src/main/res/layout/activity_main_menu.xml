@@ -22,10 +22,9 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="274dp"
-            app:srcCompat="@drawable/Speedometer"
+            app:srcCompat="@drawable/speedometer"
             android:id="@+id/imageView"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:contentDescription="An image of an accelerometer" />
 
         <Button
             android:text="Start Recording"

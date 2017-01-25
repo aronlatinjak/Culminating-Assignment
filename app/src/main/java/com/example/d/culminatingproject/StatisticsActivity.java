@@ -25,8 +25,11 @@ import java.util.TimerTask;
  */
 public class StatisticsActivity extends AppCompatActivity implements SensorEventListener {
 
-    private static final int GRAPH_REFRESH_RATE = 125;
+    private static final int GRAPH_REFRESH_RATE = 250;
     private static final int GRAPH_TIME_RANGE = 30;
+    // Used to set how many points to draw on the graph
+    private static final int GRAPH_MAX_POINTS = 300;
+    private static final int DATA_POINTS_TO_DISCARD = 20;
 
     private LineGraphSeries<DataPoint> points;
     private SensorManager sensorManager;
@@ -75,7 +78,7 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         setting = SaveStaticClass.readSettings(getApplicationContext());
 
         // Set up accuracy counter to discard first 10 results
-        accuracyCounter  = 10;
+        accuracyCounter = DATA_POINTS_TO_DISCARD;
 
         // Set up the gravity for the low-pass filter for removing gravity from acceleration
         gravity = new float[]{0,0,0};
@@ -114,17 +117,6 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
 
     }
 
-
-
-
-
-    // TODO:
-    // Hey aron. could you make the method for saving the data here? thanks.
-
-
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -146,19 +138,28 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
 
         // Get all the times
         double[] times = dataSet.getTimes();
+
+        int numPointsToDraw = (times.length > GRAPH_MAX_POINTS)? GRAPH_MAX_POINTS: times.length;
+
         // Store new points
-        DataPoint[] freshPoints = new DataPoint[times.length];
+        DataPoint[] freshPoints = new DataPoint[numPointsToDraw];
         // String for title of graph
         final int titleString;
         // String for the y-axis of graph
         final int axisLabel;
 
+        // Calculate which points to draw
+        int firstPointDrawn = (times.length-GRAPH_MAX_POINTS>0)?
+                times.length-GRAPH_MAX_POINTS:
+                0;
+
         // if the switch is to the right
         if(velAccelSwitch.isChecked()) {
             // Get all the accelerations
             double[] accels = dataSet.getAccelerations();
-            for (int i = 0; i < times.length; i++) {
-                freshPoints[i] = new DataPoint(times[i], accels[i]);
+            // Add the relevant accelerations to the "to be drawn" array
+            for (int i = 0; i < numPointsToDraw; i++) {
+                freshPoints[i] = new DataPoint(times[i+firstPointDrawn], accels[i+firstPointDrawn]);
             }
             // Set the graph title
             titleString = R.string.at_graph_label;
@@ -166,8 +167,9 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         } else {
             // Get all the velocities
             double[] velocities = dataSet.getSpeeds();
-            for (int i = 0; i < times.length; i++) {
-                freshPoints[i] = new DataPoint(times[i], velocities[i]);
+            // Add the relevant velocities to the "to be drawn" array
+            for (int i = 0; i < numPointsToDraw; i++) {
+                freshPoints[i] = new DataPoint(times[i+firstPointDrawn], velocities[i+firstPointDrawn]);
             }
             // Set the graph title
             titleString = R.string.vt_graph_label;
@@ -216,6 +218,7 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
 
         int sensorRefresh;
 
+        // Set the refresh rate based on the settings
         switch (setting.getRefreshRate()){
             case SLOW:
                 sensorRefresh = SensorManager.SENSOR_DELAY_UI;
