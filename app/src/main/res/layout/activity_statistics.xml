@@ -75,8 +75,8 @@
                 <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    textSize:srcCompat="@android:drawable/ic_media_pause"
-                    android:id="@+id/ibPlayPause" />
+                    textSize:srcCompat="@drawable/ic_stop"
+                    android:id="@+id/ibStop" />
 
                 <TextView
                     android:text="Time (s)"
