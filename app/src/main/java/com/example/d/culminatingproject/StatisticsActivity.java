@@ -1,5 +1,6 @@
 package com.example.d.culminatingproject;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -9,8 +10,11 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -50,6 +54,7 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
     private TextView maxAccelerationView;
     private TextView timeElapsedView;
     private TextView axisView;
+    private ImageButton stopButton;
 
     private float[] gravity;
 
@@ -90,6 +95,22 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         timeElapsedView = (TextView) findViewById(R.id.tvTime);
         axisView = (TextView) findViewById(R.id.tvGraphY);
 
+        // Access the stop button
+        stopButton = (ImageButton) findViewById(R.id.ibStop);
+        // Add functionality for the stop button
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dataSet.finish();
+
+                // TODO: add save method here
+
+                Intent i = new Intent(getApplicationContext(), HistoryViewActivity.class);
+                i.putExtra("data_set", dataSet);
+                startActivity(i);
+            }
+        });
+
         // Access the graph
         graphView = (GraphView) findViewById(R.id.data_graph);
 
@@ -123,10 +144,25 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 timer.cancel();
+                // Tell the user that their data will be destroyed
+                Toast.makeText(getApplicationContext(), "Stopping and deleting recording...", Toast.LENGTH_SHORT)
+                        .show();
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Makes sure that the user knows that their data is deleted if teh back button is pressed.
+     */
+    @Override
+    public void onBackPressed() {
+        timer.cancel();
+        // Tell the user that their data will be destroyed
+        Toast.makeText(getApplicationContext(), "Stopping and deleting recording...", Toast.LENGTH_SHORT)
+                .show();
+        super.onBackPressed();
     }
 
     /**

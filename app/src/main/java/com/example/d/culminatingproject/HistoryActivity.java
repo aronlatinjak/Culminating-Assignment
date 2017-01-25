@@ -188,6 +188,9 @@ public class HistoryActivity extends AppCompatActivity {
      * post: ListView refreshed
      */
     public void reloadListItems() {
+
+        // TODO: add proper reading and remove dummy data
+
         // Get all the past recordings
         pastRecordings = SaveStaticClass.readSaves(getApplicationContext());
 
