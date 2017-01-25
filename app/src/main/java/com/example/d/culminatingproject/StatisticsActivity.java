@@ -33,6 +33,7 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
     private Sensor accel;
     private DataSet dataSet;
     private Timer timer;
+    private Setting setting;
 
     // This variable is used to discard the first couple pieces of data. This helps make sure
     // that the gravity value adjusts correctly before the recording starts
@@ -69,6 +70,9 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
 
         // Access the switch, which alternates between velocity time and position time
         velAccelSwitch = (Switch) findViewById(R.id.switchVelocityPosition);
+
+        // Get the recording settings
+        setting = SaveStaticClass.readSettings(getApplicationContext());
 
         // Set up accuracy counter to discard first 10 results
         accuracyCounter  = 10;
@@ -210,9 +214,23 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
     protected void onResume() {
         super.onResume();
 
-        // TODO: implement a switch structure to change the frequency of the requests for the sensor
+        int sensorRefresh;
 
-        sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
+        switch (setting.getRefreshRate()){
+            case SLOW:
+                sensorRefresh = SensorManager.SENSOR_DELAY_UI;
+                break;
+            case MEDIUM:
+                sensorRefresh = SensorManager.SENSOR_DELAY_NORMAL;
+                break;
+            case FAST:
+                sensorRefresh = SensorManager.SENSOR_DELAY_FASTEST;
+                break;
+            default:
+                sensorRefresh = SensorManager.SENSOR_DELAY_NORMAL;
+        }
+
+        sensorManager.registerListener(this, accel, sensorRefresh);
     }
 
     /**

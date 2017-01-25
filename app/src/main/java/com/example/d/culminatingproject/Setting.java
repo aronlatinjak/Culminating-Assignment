@@ -4,10 +4,12 @@ package com.example.d.culminatingproject;
  * Created by D on 2017-01-24.
  */
 
+import java.io.Serializable;
+
 /**
  * Used to store the settings
  */
-public class Setting {
+public class Setting implements Serializable {
 
     private RefreshRate refreshRate;
     boolean kmh;

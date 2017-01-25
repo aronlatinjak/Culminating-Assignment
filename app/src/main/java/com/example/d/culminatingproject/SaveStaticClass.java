@@ -59,21 +59,26 @@ public class SaveStaticClass {
 
         try {
             File settingsFile = new File(context.getFilesDir(), "Settings.txt");
+
             if(settingsFile.exists()) {
+
                 // Read the file
                 FileInputStream fileInputStream = new FileInputStream(settingsFile);
+                // The the Setting object from the file
                 ObjectInputStream ois = new ObjectInputStream(fileInputStream);
                 setting = (Setting) ois.readObject();
             } else {
                 // Create the file
                 setting = new Setting();
                 settingsFile.createNewFile();
+                // Add a blank setting to the file
                 FileOutputStream fos = new FileOutputStream(settingsFile);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
                 oos.writeObject(setting);
             }
         } catch (IOException | ClassNotFoundException ioe){
             // Beats me...
+            System.err.println(ioe.getMessage());
             setting = new Setting();
         }
 
@@ -91,8 +96,9 @@ public class SaveStaticClass {
             FileOutputStream fos = new FileOutputStream(settingsFile);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(s);
+            Toast.makeText(context, "Settings saved", Toast.LENGTH_LONG).show();
         } catch (IOException ioe) {
-            Toast.makeText(context, "Settings failed to save", Toast.LENGTH_LONG);
+            Toast.makeText(context, "Settings failed to save", Toast.LENGTH_LONG).show();
         }
     }
 
