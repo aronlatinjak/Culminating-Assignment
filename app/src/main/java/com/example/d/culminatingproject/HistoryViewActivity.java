@@ -103,19 +103,28 @@ public class HistoryViewActivity extends AppCompatActivity {
             }
         });
 
+        // Initial draw of the graph
         refreshGraph();
 
     }
 
+    /**
+     * Called when the back button on the nav bar has been pressed.
+     * @param item which item of the nav bar has been pressed.
+     * @return true if the back button was indeed pressed.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 if (cameFromRecording) {
+                    // If this activity was created by a recording activity, go back to main
+                    // menu instead of it
                     Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
                     startActivity(i);
                 } else {
+                    // Navigate up
                     NavUtils.navigateUpFromSameTask(this);
                 }
                 return true;
@@ -129,6 +138,7 @@ public class HistoryViewActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
+        // Similar method as the one above
         if (cameFromRecording) {
             Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
             startActivity(i);
@@ -161,7 +171,7 @@ public class HistoryViewActivity extends AppCompatActivity {
             for (int i = 0; i < times.length; i++) {
                 freshPoints[i] = new DataPoint(
                         // / If the setting tells it to be in hours, divide by 3600
-                        (setting.isinHours())?
+                        (setting.isInHours())?
                                 times[i]/3600:
                                 times[i], accels[i]);
             }
@@ -175,7 +185,7 @@ public class HistoryViewActivity extends AppCompatActivity {
             for (int i = 0; i < times.length; i++) {
                 freshPoints[i] = new DataPoint(
                         // If the setting tells it to be in hours, divide by 3600
-                        (setting.isinHours())?
+                        (setting.isInHours())?
                                 times[i]/3600:
                                 times[i],
                         // If the setting tells it to be in km/h, multiply by 3.6
@@ -216,7 +226,7 @@ public class HistoryViewActivity extends AppCompatActivity {
                 timeElapsedView.setText(getString(R.string.time_elapsed) + ":\t\t\t\t\t\t\t\t" +
                         df.format(dataSet.getTimeElapsedSeconds()) + " s");
                 yAxisView.setText(axisLabel);
-                xAxisView.setText((setting.isinHours())?
+                xAxisView.setText((setting.isInHours())?
                         R.string.time_axis_label_h:
                         R.string.time_axis_label_s);
             }

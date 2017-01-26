@@ -42,7 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Update the sliders to what is specified in the current settings
         velocitySwitch.setChecked(s.isInKMPerH());
-        timeSwitch.setChecked(s.isinHours());
+        timeSwitch.setChecked(s.isInHours());
 
         // Update the radio buttons to what is specified in the current settings
         switch(s.getRefreshRate()) {

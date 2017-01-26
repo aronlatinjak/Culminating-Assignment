@@ -203,8 +203,8 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
             for (int i = 0; i < numPointsToDraw; i++) {
                 freshPoints[i] = new DataPoint(
                         // / If the setting tells it to be in hours, divide by 3600
-                        (setting.isinHours())?
-                                (double)times[i+firstPointDrawn]/3600:
+                        (setting.isInHours())?
+                                times[i+firstPointDrawn]/3600:
                                 times[i+firstPointDrawn], accels[i+firstPointDrawn]);
             }
             // Set the graph title
@@ -217,8 +217,8 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
             for (int i = 0; i < numPointsToDraw; i++) {
                 freshPoints[i] = new DataPoint(
                         // If the setting tells it to be in hours, divide by 3600
-                        (setting.isinHours())?
-                                (double)times[i+firstPointDrawn]/3600:
+                        (setting.isInHours())?
+                                times[i+firstPointDrawn]/3600:
                                 times[i+firstPointDrawn],
                         // If the setting tells it to be in km/h, multiply by 3.6
                         (setting.isInKMPerH())?
@@ -238,9 +238,9 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         if (times.length-1>0) {
             // If the setting is on hours, stretch graph axises accordingly
             graphView.getViewport().setMinX((times[times.length-1] - GRAPH_TIME_RANGE)
-                    /((setting.isinHours())?3600:1));
+                    /((setting.isInHours())?3600:1));
             graphView.getViewport().setMaxX(times[times.length-1]
-                    /((setting.isinHours())?3600:1));
+                    /((setting.isInHours())?3600:1));
         }
 
         // Update elements of the UI
@@ -261,7 +261,7 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
                 timeElapsedView.setText(getString(R.string.time_elapsed) + ":\t\t\t\t\t\t\t\t" +
                         df.format(dataSet.getTimeElapsedSeconds()) + " s");
                 yAxisView.setText(axisLabel);
-                xAxisView.setText((setting.isinHours())?
+                xAxisView.setText((setting.isInHours())?
                         R.string.time_axis_label_h:
                         R.string.time_axis_label_s);
             }
