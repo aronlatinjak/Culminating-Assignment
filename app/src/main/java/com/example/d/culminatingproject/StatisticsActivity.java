@@ -107,6 +107,9 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
 
                 // TODO: add save method here
 
+                Toast.makeText(getApplicationContext(),"Recording saved", Toast.LENGTH_SHORT)
+                        .show();
+
                 Intent i = new Intent(getApplicationContext(), HistoryViewActivity.class);
                 i.putExtra("data_set", dataSet);
                 i.putExtra("came_from_recording", true);

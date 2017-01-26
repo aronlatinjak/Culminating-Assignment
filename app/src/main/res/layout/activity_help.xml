@@ -31,7 +31,7 @@
         android:id="@+id/textView4"
         android:textSize="20sp"
         android:textStyle="normal|bold"
-        android:textColor="?attr/textColorAccent"
+        android:textColor="@color/colorAccent"
         tools:textColor="@android:color/holo_blue_bright"
         android:textIsSelectable="true" />
 
