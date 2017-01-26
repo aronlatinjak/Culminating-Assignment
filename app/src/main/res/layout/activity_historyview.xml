@@ -95,10 +95,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <SeekBar
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/seekBar4" />
+                android:layout_height="15dp" />
 
             <TextView
                 android:textColor="@color/colorTextTitle"
