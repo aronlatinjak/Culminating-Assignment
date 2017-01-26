@@ -1,6 +1,7 @@
 package com.example.d.culminatingproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,10 +55,18 @@ class CustomLAdapter extends ArrayAdapter<DataSet> {
         customView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 String output = "You clicked element #" + accessiblePosition;
 
                 // Makes the alert box appear
                 Toast.makeText(getContext(), output, Toast.LENGTH_LONG).show();
+                */
+                // Send the reader to a new activity with the data present
+                Intent recordingIntent = new Intent(getContext(), HistoryViewActivity.class);
+                recordingIntent.putExtra("data_set", data[accessiblePosition]);
+                recordingIntent.putExtra("came_from_recording", false);
+                getContext().startActivity(recordingIntent);
+
             }
         });
 

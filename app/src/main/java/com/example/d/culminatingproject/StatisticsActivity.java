@@ -1,5 +1,6 @@
 package com.example.d.culminatingproject;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -9,8 +10,11 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -25,14 +29,18 @@ import java.util.TimerTask;
  */
 public class StatisticsActivity extends AppCompatActivity implements SensorEventListener {
 
-    private static final int GRAPH_REFRESH_RATE = 125;
+    private static final int GRAPH_REFRESH_RATE = 250;
     private static final int GRAPH_TIME_RANGE = 30;
+    // Used to set how many points to draw on the graph
+    private static final int GRAPH_MAX_POINTS = 300;
+    private static final int DATA_POINTS_TO_DISCARD = 20;
 
     private LineGraphSeries<DataPoint> points;
     private SensorManager sensorManager;
     private Sensor accel;
     private DataSet dataSet;
     private Timer timer;
+    private Setting setting;
 
     // This variable is used to discard the first couple pieces of data. This helps make sure
     // that the gravity value adjusts correctly before the recording starts
@@ -45,7 +53,9 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
     private TextView maxVelocityView;
     private TextView maxAccelerationView;
     private TextView timeElapsedView;
-    private TextView axisView;
+    private TextView yAxisView;
+    private TextView xAxisView;
+    private ImageButton stopButton;
 
     private float[] gravity;
 
@@ -70,8 +80,11 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         // Access the switch, which alternates between velocity time and position time
         velAccelSwitch = (Switch) findViewById(R.id.switchVelocityPosition);
 
+        // Get the recording settings
+        setting = SaveStaticClass.readSettings(getApplicationContext());
+
         // Set up accuracy counter to discard first 10 results
-        accuracyCounter  = 10;
+        accuracyCounter = DATA_POINTS_TO_DISCARD;
 
         // Set up the gravity for the low-pass filter for removing gravity from acceleration
         gravity = new float[]{0,0,0};
@@ -81,7 +94,25 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         maxVelocityView = (TextView) findViewById(R.id.tvMaxVelocity);
         maxAccelerationView = (TextView) findViewById(R.id.tvMaxAccel);
         timeElapsedView = (TextView) findViewById(R.id.tvTime);
-        axisView = (TextView) findViewById(R.id.tvGraphY);
+        yAxisView = (TextView) findViewById(R.id.tvGraphY);
+        xAxisView = (TextView) findViewById(R.id.tvGraphX);
+
+        // Access the stop button
+        stopButton = (ImageButton) findViewById(R.id.ibStop);
+        // Add functionality for the stop button
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dataSet.finish();
+
+                // TODO: add save method here
+
+                Intent i = new Intent(getApplicationContext(), HistoryViewActivity.class);
+                i.putExtra("data_set", dataSet);
+                i.putExtra("came_from_recording", true);
+                startActivity(i);
+            }
+        });
 
         // Access the graph
         graphView = (GraphView) findViewById(R.id.data_graph);
@@ -110,27 +141,31 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
 
     }
 
-
-
-
-
-    // TODO:
-    // Hey aron. could you make the method for saving the data here? thanks.
-
-
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 timer.cancel();
+                // Tell the user that their data will be destroyed
+                Toast.makeText(getApplicationContext(), "Stopping and deleting recording...", Toast.LENGTH_SHORT)
+                        .show();
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Makes sure that the user knows that their data is deleted if teh back button is pressed.
+     */
+    @Override
+    public void onBackPressed() {
+        timer.cancel();
+        // Tell the user that their data will be destroyed
+        Toast.makeText(getApplicationContext(), "Stopping and deleting recording...", Toast.LENGTH_SHORT)
+                .show();
+        super.onBackPressed();
     }
 
     /**
@@ -142,19 +177,32 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
 
         // Get all the times
         double[] times = dataSet.getTimes();
+
+        int numPointsToDraw = (times.length > GRAPH_MAX_POINTS)? GRAPH_MAX_POINTS: times.length;
+
         // Store new points
-        DataPoint[] freshPoints = new DataPoint[times.length];
+        DataPoint[] freshPoints = new DataPoint[numPointsToDraw];
         // String for title of graph
         final int titleString;
         // String for the y-axis of graph
         final int axisLabel;
 
+        // Calculate which points to draw
+        int firstPointDrawn = (times.length-GRAPH_MAX_POINTS>0)?
+                times.length-GRAPH_MAX_POINTS:
+                0;
+
         // if the switch is to the right
         if(velAccelSwitch.isChecked()) {
             // Get all the accelerations
             double[] accels = dataSet.getAccelerations();
-            for (int i = 0; i < times.length; i++) {
-                freshPoints[i] = new DataPoint(times[i], accels[i]);
+            // Add the relevant accelerations to the "to be drawn" array
+            for (int i = 0; i < numPointsToDraw; i++) {
+                freshPoints[i] = new DataPoint(
+                        // / If the setting tells it to be in hours, divide by 3600
+                        (setting.isinHours())?
+                                (double)times[i+firstPointDrawn]/3600:
+                                times[i+firstPointDrawn], accels[i+firstPointDrawn]);
             }
             // Set the graph title
             titleString = R.string.at_graph_label;
@@ -162,20 +210,34 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         } else {
             // Get all the velocities
             double[] velocities = dataSet.getSpeeds();
-            for (int i = 0; i < times.length; i++) {
-                freshPoints[i] = new DataPoint(times[i], velocities[i]);
+            // Add the relevant velocities to the "to be drawn" array
+            for (int i = 0; i < numPointsToDraw; i++) {
+                freshPoints[i] = new DataPoint(
+                        // If the setting tells it to be in hours, divide by 3600
+                        (setting.isinHours())?
+                                (double)times[i+firstPointDrawn]/3600:
+                                times[i+firstPointDrawn],
+                        // If the setting tells it to be in km/h, multiply by 3.6
+                        (setting.isInKMPerH())?
+                                velocities[i+firstPointDrawn]*3.6:
+                                velocities[i+firstPointDrawn]);
             }
             // Set the graph title
             titleString = R.string.vt_graph_label;
-            axisLabel = R.string.velocity_axis_label;
+            axisLabel = (setting.isInKMPerH())?
+                R.string.velocity_axis_label_kmh:
+                R.string.velocity_axis_label_ms;
         }
 
         // swap out the old DataPoints with the new ones
         points.resetData(freshPoints);
         // if there is data, stretch graph to fit it
         if (times.length-1>0) {
-            graphView.getViewport().setMinX(times[times.length-1] - GRAPH_TIME_RANGE);
-            graphView.getViewport().setMaxX(times[times.length-1]);
+            // If the setting is on hours, stretch graph axises accordingly
+            graphView.getViewport().setMinX((times[times.length-1] - GRAPH_TIME_RANGE)
+                    /((setting.isinHours())?3600:1));
+            graphView.getViewport().setMaxX(times[times.length-1]
+                    /((setting.isinHours())?3600:1));
         }
 
         // Update elements of the UI
@@ -195,7 +257,10 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
                 // Set time elapsed
                 timeElapsedView.setText(getString(R.string.time_elapsed) + ":\t\t\t\t\t\t\t\t" +
                         df.format(dataSet.getTimeElapsedSeconds()) + " s");
-                axisView.setText(axisLabel);
+                yAxisView.setText(axisLabel);
+                xAxisView.setText((setting.isinHours())?
+                        R.string.time_axis_label_h:
+                        R.string.time_axis_label_s);
             }
         });
 
@@ -210,9 +275,24 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
     protected void onResume() {
         super.onResume();
 
-        // TODO: implement a switch structure to change the frequency of the requests for the sensor
+        int sensorRefresh;
 
-        sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
+        // Set the refresh rate based on the settings
+        switch (setting.getRefreshRate()){
+            case SLOW:
+                sensorRefresh = SensorManager.SENSOR_DELAY_UI;
+                break;
+            case MEDIUM:
+                sensorRefresh = SensorManager.SENSOR_DELAY_NORMAL;
+                break;
+            case FAST:
+                sensorRefresh = SensorManager.SENSOR_DELAY_FASTEST;
+                break;
+            default:
+                sensorRefresh = SensorManager.SENSOR_DELAY_NORMAL;
+        }
+
+        sensorManager.registerListener(this, accel, sensorRefresh);
     }
 
     /**

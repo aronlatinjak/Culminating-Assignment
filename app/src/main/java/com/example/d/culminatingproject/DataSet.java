@@ -17,7 +17,7 @@ import java.util.Date;
 public class DataSet implements Comparable, Parcelable {
 
     private Date initialTime;
-    private ArrayList<DataPoint> dataPoints;
+    public ArrayList<DataPoint> dataPoints;
     private boolean isFinished;
 
     /**
@@ -215,7 +215,10 @@ public class DataSet implements Comparable, Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        DataPoint[] dataPArray = (DataPoint[]) dataPoints.toArray();
+        DataPoint[] dataPArray = new DataPoint[dataPoints.size()];
+        for (int i = 0; i < dataPArray.length; i++) {
+            dataPArray[i] = dataPoints.get(i);
+        }
         dest.writeArray(dataPArray);
         dest.writeValue(initialTime);
         dest.writeValue(isFinished);
@@ -227,10 +230,17 @@ public class DataSet implements Comparable, Parcelable {
     public static final Parcelable.Creator<DataSet> CREATOR = new Parcelable.Creator<DataSet>(){
         @Override
         public DataSet createFromParcel(Parcel in) {
+
+            Object[] parcelledPoints = in.readArray(DataPoint.class.getClassLoader());
+            DataPoint[] readPoints  = new DataPoint[parcelledPoints.length];
+            for (int i = 0; i < readPoints.length; i++) {
+                readPoints[i] = (DataPoint) parcelledPoints[i];
+            }
+
             return new DataSet(
-                    (DataPoint[]) in.readArray(ClassLoader.getSystemClassLoader()),
-                    (Date) in.readValue(ClassLoader.getSystemClassLoader()),
-                    (boolean) in.readValue(ClassLoader.getSystemClassLoader())
+                    readPoints,
+                    (Date) in.readValue(Date.class.getClassLoader()),
+                    (boolean) in.readValue(Boolean.class.getClassLoader())
             );
         }
 

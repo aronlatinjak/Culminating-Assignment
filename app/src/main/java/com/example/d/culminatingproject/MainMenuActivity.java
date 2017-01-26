@@ -24,6 +24,15 @@ public class MainMenuActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Send the user to their application launcher if they press back
+     */
+    public void onBackPressed() {
+        Intent i = new Intent(Intent.ACTION_MAIN);
+        i.addCategory(Intent.CATEGORY_HOME);
+        startActivity(i);
+    }
+
     public void startRecording(View view) {
         Intent i = new Intent(this, StatisticsActivity.class);
         startActivity(i);

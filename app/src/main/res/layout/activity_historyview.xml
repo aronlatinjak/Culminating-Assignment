@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:textSize="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_statistics"
+    android:id="@+id/activity_historyview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -10,21 +10,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.d.culminatingproject.StatisticsActivity">
-
-    <TextView
-        android:text="Velocity vs Time"
-        android:layout_height="40dp"
-        android:id="@+id/tvGraphTitle"
-        android:gravity="center"
-        android:textStyle="normal|bold"
-        android:textSize="18sp"
-        android:textColor="@color/colorTextTitle"
-        android:layout_width="wrap_content"
-        android:layout_weight="0.74"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="455dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,14 +26,24 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="50dp" >
+                android:layout_height="match_parent" >
 
                 <Switch
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:id="@+id/switchVelocityPosition"
                     android:gravity="center"
-                    android:checked="false" />
+                    android:checked="false"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:text="Velocity vs Time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:id="@+id/tvGraphTitle"
+                    android:textStyle="normal|bold"
+                    android:textColor="@color/colorTextTitle"
+                    android:textSize="18sp"
+                    android:gravity="center" />
 
             </TableRow>
 
@@ -57,12 +52,12 @@
                 android:layout_height="match_parent" >
 
                 <TextView
-                    android:text="Velocity (m/s)"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/tvGraphY"
-                    android:gravity="center"
-                    android:rotation="-90" />
+                android:text="Velocity (m/s)"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:id="@+id/tvGraphY"
+                android:gravity="center"
+                android:rotation="-90" />
 
                 <com.jjoe64.graphview.GraphView
                     android:id="@+id/data_graph"
@@ -72,23 +67,37 @@
 
             </TableRow>
 
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    textSize:srcCompat="@android:drawable/stat_sys_download"
+                    android:tint="@color/colorIconBlue"
+                    android:backgroundTint="@color/colorClear"
+                    android:id="@+id/btnDownload" />
+
+                <TextView
+                    android:text="Time (s)"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/tvGraphX"
+                    android:gravity="center"
+                    android:layout_height="40dp" />
+
+            </TableRow>
+
         </TableLayout>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:text="Time (s)"
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView7" />
-
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/seekBar4" />
+                android:layout_height="15dp" />
 
             <TextView
                 android:textColor="@color/colorTextTitle"
@@ -122,23 +131,7 @@
                 android:textSize="16sp"
                 android:textIsSelectable="false" />
 
-            <TextView
-                android:text="Velocity:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView3"
-                android:textSize="16sp"
-                android:textIsSelectable="false" />
-
-            <TextView
-                android:text="Min Velocity:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView8"
-                android:textSize="16sp"
-                android:textIsSelectable="false" />
         </LinearLayout>
-
     </LinearLayout>
 
 </RelativeLayout>

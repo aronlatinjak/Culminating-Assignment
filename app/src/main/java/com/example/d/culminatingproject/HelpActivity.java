@@ -34,4 +34,5 @@ public class HelpActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
