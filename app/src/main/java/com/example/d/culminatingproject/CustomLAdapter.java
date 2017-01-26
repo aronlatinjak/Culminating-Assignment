@@ -64,6 +64,7 @@ class CustomLAdapter extends ArrayAdapter<DataSet> {
                 // Send the reader to a new activity with the data present
                 Intent recordingIntent = new Intent(getContext(), HistoryViewActivity.class);
                 recordingIntent.putExtra("data_set", data[accessiblePosition]);
+                recordingIntent.putExtra("came_from_recording", false);
                 getContext().startActivity(recordingIntent);
 
             }

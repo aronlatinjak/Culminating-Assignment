@@ -24,7 +24,7 @@
             android:layout_height="274dp"
             app:srcCompat="@drawable/speedometer"
             android:id="@+id/imageView"
-            android:contentDescription="An image of an accelerometer" />
+            android:contentDescription="An image of an accelerometer"/>
 
         <Button
             android:text="Start Recording"

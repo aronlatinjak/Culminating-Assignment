@@ -1,5 +1,6 @@
 package com.example.d.culminatingproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
@@ -7,8 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.*;
@@ -26,10 +29,13 @@ public class HistoryViewActivity extends AppCompatActivity {
     private LineGraphSeries<DataPoint> points;
     private DataSet dataSet;
     private Setting setting;
+    private boolean cameFromRecording;
 
     // Parts of the GUI
     private Switch velAccelSwitch;
     private GraphView graphView;
+    private ImageButton downloadButton;
+    // TextViews!
     private TextView graphTitle;
     private TextView maxVelocityView;
     private TextView maxAccelerationView;
@@ -51,6 +57,8 @@ public class HistoryViewActivity extends AppCompatActivity {
 
         // Read the DataSet from the intent that created this activity
         dataSet = getIntent().getParcelableExtra("data_set");
+        // Check if this data came from a fresh recording
+        cameFromRecording = getIntent().getBooleanExtra("came_from_recording", true);
 
         // Read the settings
         setting = SaveStaticClass.readSettings(getApplicationContext());
@@ -62,6 +70,21 @@ public class HistoryViewActivity extends AppCompatActivity {
         timeElapsedView = (TextView) findViewById(R.id.tvTime);
         yAxisView = (TextView) findViewById(R.id.tvGraphY);
         xAxisView = (TextView) findViewById(R.id.tvGraphX);
+
+        // initialize download button
+        downloadButton = (ImageButton) findViewById(R.id.btnDownload);
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // TODO: make work
+                SaveStaticClass.exportAsCsv(getApplicationContext(), dataSet);
+
+                // Tell the user that they downloaded the file
+                Toast.makeText(getApplicationContext(),"Downloaded as .csv", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
 
         // Initialize the points to draw on the graph (immediately rewritten, so the numbers
         // themselves here don't really matter)
@@ -80,19 +103,48 @@ public class HistoryViewActivity extends AppCompatActivity {
             }
         });
 
+        // Initial draw of the graph
         refreshGraph();
 
     }
 
+    /**
+     * Called when the back button on the nav bar has been pressed.
+     * @param item which item of the nav bar has been pressed.
+     * @return true if the back button was indeed pressed.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                if (cameFromRecording) {
+                    // If this activity was created by a recording activity, go back to main
+                    // menu instead of it
+                    Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
+                    startActivity(i);
+                } else {
+                    // Navigate up
+                    NavUtils.navigateUpFromSameTask(this);
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * A hacked way of getting the user to the home screen after taking a recording, instead of
+     * bringing them back to the recording (statistics) page
+     */
+    @Override
+    public void onBackPressed() {
+        // Similar method as the one above
+        if (cameFromRecording) {
+            Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
+            startActivity(i);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     /**
@@ -119,7 +171,7 @@ public class HistoryViewActivity extends AppCompatActivity {
             for (int i = 0; i < times.length; i++) {
                 freshPoints[i] = new DataPoint(
                         // / If the setting tells it to be in hours, divide by 3600
-                        (setting.isinHours())?
+                        (setting.isInHours())?
                                 times[i]/3600:
                                 times[i], accels[i]);
             }
@@ -133,7 +185,7 @@ public class HistoryViewActivity extends AppCompatActivity {
             for (int i = 0; i < times.length; i++) {
                 freshPoints[i] = new DataPoint(
                         // If the setting tells it to be in hours, divide by 3600
-                        (setting.isinHours())?
+                        (setting.isInHours())?
                                 times[i]/3600:
                                 times[i],
                         // If the setting tells it to be in km/h, multiply by 3.6
@@ -174,7 +226,7 @@ public class HistoryViewActivity extends AppCompatActivity {
                 timeElapsedView.setText(getString(R.string.time_elapsed) + ":\t\t\t\t\t\t\t\t" +
                         df.format(dataSet.getTimeElapsedSeconds()) + " s");
                 yAxisView.setText(axisLabel);
-                xAxisView.setText((setting.isinHours())?
+                xAxisView.setText((setting.isInHours())?
                         R.string.time_axis_label_h:
                         R.string.time_axis_label_s);
             }
