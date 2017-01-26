@@ -3,6 +3,7 @@ package com.example.d.culminatingproject;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -14,7 +15,7 @@ import java.util.Date;
  * Created by D on 2017-01-20.
  */
 
-public class DataSet implements Comparable, Parcelable {
+public class DataSet implements Comparable, Parcelable, Serializable {
 
     private Date initialTime;
     public ArrayList<DataPoint> dataPoints;
@@ -52,17 +53,17 @@ public class DataSet implements Comparable, Parcelable {
     public void establishNextDataPoint(float xAcceleration, float yAcceleration, float zAcceleration) {
 
         if (!isFinished) {
-            if(dataPoints.isEmpty()) {
-                DataPoint newPoint = new DataPoint(System.currentTimeMillis(),System.currentTimeMillis(),
-                        xAcceleration, yAcceleration, zAcceleration,
-                        0, 0, 0);
-                dataPoints.add(newPoint);
-            } else {
-                DataPoint last = dataPoints.get(dataPoints.size() - 1);
-                DataPoint newPoint = new DataPoint(System.currentTimeMillis(),last.getTime(),
-                        xAcceleration, yAcceleration, zAcceleration,
-                        last.getXVelocity(), last.getYVelocity(), last.getZVelocity());
-                dataPoints.add(newPoint);
+                    if(dataPoints.isEmpty()) {
+                        DataPoint newPoint = new DataPoint(System.currentTimeMillis(),System.currentTimeMillis(),
+                                xAcceleration, yAcceleration, zAcceleration,
+                                0, 0, 0);
+                        dataPoints.add(newPoint);
+                    } else {
+                        DataPoint last = dataPoints.get(dataPoints.size() - 1);
+                        DataPoint newPoint = new DataPoint(System.currentTimeMillis(),last.getTime(),
+                                xAcceleration, yAcceleration, zAcceleration,
+                                last.getXVelocity(), last.getYVelocity(), last.getZVelocity());
+                        dataPoints.add(newPoint);
             }
         }
 
@@ -86,7 +87,6 @@ public class DataSet implements Comparable, Parcelable {
         }
 
         return max;
-
     }
 
     /**
