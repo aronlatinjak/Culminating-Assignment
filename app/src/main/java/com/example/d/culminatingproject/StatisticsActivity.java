@@ -109,6 +109,7 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
 
                 Intent i = new Intent(getApplicationContext(), HistoryViewActivity.class);
                 i.putExtra("data_set", dataSet);
+                i.putExtra("came_from_recording", true);
                 startActivity(i);
             }
         });

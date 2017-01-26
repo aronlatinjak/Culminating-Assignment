@@ -73,7 +73,7 @@
         <!-- HistoryView activity -->
         <activity
             android:name=".HistoryViewActivity"
-            android:label="@string/help_title"
+            android:label="@string/historyview_title"
             android:parentActivityName=".HistoryActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
