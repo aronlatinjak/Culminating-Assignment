@@ -10,7 +10,10 @@
     <string name="max_velocity">Max Velocity</string>
     <string name="max_acceleration">Max Acceleration</string>
     <string name="time_elapsed">Time Elapsed</string>
-    <string name="velocity_axis_label">Velocity (m/s)</string>
+    <string name="velocity_axis_label_ms">Velocity (m/s)</string>
+    <string name="velocity_axis_label_kmh">Velocity (km/h)</string>
     <string name="acceleration_axis_label">Acceleration (m/s&#178;)</string>
+    <string name="time_axis_label_s">Time (s)</string>
+    <string name="time_axis_label_h">Time (h)</string>
 
 </resources>

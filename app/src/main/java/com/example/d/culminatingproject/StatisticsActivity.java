@@ -53,7 +53,8 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
     private TextView maxVelocityView;
     private TextView maxAccelerationView;
     private TextView timeElapsedView;
-    private TextView axisView;
+    private TextView yAxisView;
+    private TextView xAxisView;
     private ImageButton stopButton;
 
     private float[] gravity;
@@ -93,7 +94,8 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
         maxVelocityView = (TextView) findViewById(R.id.tvMaxVelocity);
         maxAccelerationView = (TextView) findViewById(R.id.tvMaxAccel);
         timeElapsedView = (TextView) findViewById(R.id.tvTime);
-        axisView = (TextView) findViewById(R.id.tvGraphY);
+        yAxisView = (TextView) findViewById(R.id.tvGraphY);
+        xAxisView = (TextView) findViewById(R.id.tvGraphX);
 
         // Access the stop button
         stopButton = (ImageButton) findViewById(R.id.ibStop);
@@ -195,7 +197,11 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
             double[] accels = dataSet.getAccelerations();
             // Add the relevant accelerations to the "to be drawn" array
             for (int i = 0; i < numPointsToDraw; i++) {
-                freshPoints[i] = new DataPoint(times[i+firstPointDrawn], accels[i+firstPointDrawn]);
+                freshPoints[i] = new DataPoint(
+                        // / If the setting tells it to be in hours, divide by 3600
+                        (setting.isinHours())?
+                                (double)times[i+firstPointDrawn]/3600:
+                                times[i+firstPointDrawn], accels[i+firstPointDrawn]);
             }
             // Set the graph title
             titleString = R.string.at_graph_label;
@@ -205,19 +211,32 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
             double[] velocities = dataSet.getSpeeds();
             // Add the relevant velocities to the "to be drawn" array
             for (int i = 0; i < numPointsToDraw; i++) {
-                freshPoints[i] = new DataPoint(times[i+firstPointDrawn], velocities[i+firstPointDrawn]);
+                freshPoints[i] = new DataPoint(
+                        // If the setting tells it to be in hours, divide by 3600
+                        (setting.isinHours())?
+                                (double)times[i+firstPointDrawn]/3600:
+                                times[i+firstPointDrawn],
+                        // If the setting tells it to be in km/h, multiply by 3.6
+                        (setting.isInKMPerH())?
+                                velocities[i+firstPointDrawn]*3.6:
+                                velocities[i+firstPointDrawn]);
             }
             // Set the graph title
             titleString = R.string.vt_graph_label;
-            axisLabel = R.string.velocity_axis_label;
+            axisLabel = (setting.isInKMPerH())?
+                R.string.velocity_axis_label_kmh:
+                R.string.velocity_axis_label_ms;
         }
 
         // swap out the old DataPoints with the new ones
         points.resetData(freshPoints);
         // if there is data, stretch graph to fit it
         if (times.length-1>0) {
-            graphView.getViewport().setMinX(times[times.length-1] - GRAPH_TIME_RANGE);
-            graphView.getViewport().setMaxX(times[times.length-1]);
+            // If the setting is on hours, stretch graph axises accordingly
+            graphView.getViewport().setMinX((times[times.length-1] - GRAPH_TIME_RANGE)
+                    /((setting.isinHours())?3600:1));
+            graphView.getViewport().setMaxX(times[times.length-1]
+                    /((setting.isinHours())?3600:1));
         }
 
         // Update elements of the UI
@@ -237,7 +256,10 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
                 // Set time elapsed
                 timeElapsedView.setText(getString(R.string.time_elapsed) + ":\t\t\t\t\t\t\t\t" +
                         df.format(dataSet.getTimeElapsedSeconds()) + " s");
-                axisView.setText(axisLabel);
+                yAxisView.setText(axisLabel);
+                xAxisView.setText((setting.isinHours())?
+                        R.string.time_axis_label_h:
+                        R.string.time_axis_label_s);
             }
         });
 

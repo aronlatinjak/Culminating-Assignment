@@ -17,6 +17,7 @@ import com.jjoe64.graphview.series.DataPoint;
 import java.text.DecimalFormat;
 
 /**
+ * Used to view a recording that has already been finished.
  * Created by D on 2017-01-25.
  */
 
@@ -26,14 +27,15 @@ public class HistoryViewActivity extends AppCompatActivity {
     private DataSet dataSet;
     private Setting setting;
 
-    // parts of the GUI
+    // Parts of the GUI
     private Switch velAccelSwitch;
     private GraphView graphView;
     private TextView graphTitle;
     private TextView maxVelocityView;
     private TextView maxAccelerationView;
     private TextView timeElapsedView;
-    private TextView axisView;
+    private TextView xAxisView;
+    private TextView yAxisView;
 
 
     @Override
@@ -47,20 +49,27 @@ public class HistoryViewActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        // Read the DataSet from the intent that created this activity
         dataSet = getIntent().getParcelableExtra("data_set");
 
-        // Initialize the textviews
+        // Read the settings
+        setting = SaveStaticClass.readSettings(getApplicationContext());
+
+        // Initialize the text views
         graphTitle = (TextView) findViewById(R.id.tvGraphTitle);
         maxVelocityView = (TextView) findViewById(R.id.tvMaxVelocity);
         maxAccelerationView = (TextView) findViewById(R.id.tvMaxAccel);
         timeElapsedView = (TextView) findViewById(R.id.tvTime);
-        axisView = (TextView) findViewById(R.id.tvGraphY);
+        yAxisView = (TextView) findViewById(R.id.tvGraphY);
+        xAxisView = (TextView) findViewById(R.id.tvGraphX);
 
-        // Initialize the points to draw on the graph
+        // Initialize the points to draw on the graph (immediately rewritten, so the numbers
+        // themselves here don't really matter)
         points = new LineGraphSeries<>(new DataPoint[]{new DataPoint(0,0)});
 
-        // Get the graphView
+        // Get the Graph View and set which points it displays
         graphView = (GraphView) findViewById(R.id.data_graph);
+        graphView.addSeries(points);
         // Get the velocity/acceleration switch
         velAccelSwitch = (Switch) findViewById(R.id.switchVelocityPosition);
         // When the switch is clicked, refresh the graph
@@ -87,12 +96,11 @@ public class HistoryViewActivity extends AppCompatActivity {
     }
 
     /**
-     * Updates the graph with the new information from the DataSet
+     * Draws the graph with the information from the DataSet
      * pre: none
      * post: graph updated
      */
     public void refreshGraph() {
-
         // Get all the times
         double[] times = dataSet.getTimes();
 
@@ -109,7 +117,11 @@ public class HistoryViewActivity extends AppCompatActivity {
             double[] accels = dataSet.getAccelerations();
             // Add the relevant accelerations to the "to be drawn" array
             for (int i = 0; i < times.length; i++) {
-                freshPoints[i] = new DataPoint(times[i], accels[i]);
+                freshPoints[i] = new DataPoint(
+                        // / If the setting tells it to be in hours, divide by 3600
+                        (setting.isinHours())?
+                                times[i]/3600:
+                                times[i], accels[i]);
             }
             // Set the graph title
             titleString = R.string.at_graph_label;
@@ -119,11 +131,21 @@ public class HistoryViewActivity extends AppCompatActivity {
             double[] velocities = dataSet.getSpeeds();
             // Add the relevant velocities to the "to be drawn" array
             for (int i = 0; i < times.length; i++) {
-                freshPoints[i] = new DataPoint(times[i], velocities[i]);
+                freshPoints[i] = new DataPoint(
+                        // If the setting tells it to be in hours, divide by 3600
+                        (setting.isinHours())?
+                                times[i]/3600:
+                                times[i],
+                        // If the setting tells it to be in km/h, multiply by 3.6
+                        (setting.isInKMPerH())?
+                                velocities[i]*3.6:
+                                velocities[i]);
             }
             // Set the graph title
             titleString = R.string.vt_graph_label;
-            axisLabel = R.string.velocity_axis_label;
+            axisLabel = (setting.isInKMPerH())?
+                    R.string.velocity_axis_label_kmh:
+                    R.string.velocity_axis_label_ms;
         }
 
         // swap out the old DataPoints with the new ones
@@ -151,7 +173,10 @@ public class HistoryViewActivity extends AppCompatActivity {
                 // Set time elapsed
                 timeElapsedView.setText(getString(R.string.time_elapsed) + ":\t\t\t\t\t\t\t\t" +
                         df.format(dataSet.getTimeElapsedSeconds()) + " s");
-                axisView.setText(axisLabel);
+                yAxisView.setText(axisLabel);
+                xAxisView.setText((setting.isinHours())?
+                        R.string.time_axis_label_h:
+                        R.string.time_axis_label_s);
             }
         });
 
