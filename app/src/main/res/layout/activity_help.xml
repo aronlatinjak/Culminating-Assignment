@@ -19,4 +19,52 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="How to use:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="36dp"
+        android:id="@+id/textView4"
+        android:textSize="20sp"
+        android:textStyle="normal|bold"
+        android:textColor="?attr/textColorAccent"
+        tools:textColor="@android:color/holo_blue_bright"
+        android:textIsSelectable="true" />
+
+    <TextView
+        android:text="Press the save button to save the recording. View saved recordings though the history button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView5"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="26dp"
+        android:id="@+id/textView6"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:text="Edit properties and change settintgs through the Settings button in the main menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView6"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp"
+        android:id="@+id/textView9"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:text="Click on the start button to begin recording. Press the stop button on the main page to stop recording."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:id="@+id/textView5"
+        android:textSize="16sp"
+        android:layout_below="@+id/textView4"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
