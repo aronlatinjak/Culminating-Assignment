@@ -2,6 +2,7 @@ package com.example.d.culminatingproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +64,7 @@ class CustomLAdapter extends ArrayAdapter<DataSet> {
                 */
                 // Send the reader to a new activity with the data present
                 Intent recordingIntent = new Intent(getContext(), HistoryViewActivity.class);
-                recordingIntent.putExtra("data_set", data[accessiblePosition]);
+                recordingIntent.putExtra("data_set", (Parcelable) data[accessiblePosition]);
                 recordingIntent.putExtra("came_from_recording", false);
                 getContext().startActivity(recordingIntent);
 

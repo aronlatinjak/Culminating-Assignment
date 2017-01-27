@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -72,13 +73,16 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                // For now, just count the number of items to delete
-                int numToDeleteCounter = 0;
+                final ArrayList<Integer> onesToDelete = new ArrayList<Integer>();
+
+                // Figure out which ones should be deleted
                 for (int i = 0; i < pastRecordings.length; i++) {
-                    if (listAdapter.getIsChecked(i)) numToDeleteCounter++;
+                    if (listAdapter.getIsChecked(i)) {
+                        onesToDelete.add(i);
+                    }
                 }
 
-                final int numToDelete = numToDeleteCounter;
+                final int numToDelete = onesToDelete.size();
 
                 AlertDialog.Builder aDB = new AlertDialog.Builder(HistoryActivity.this);
 
@@ -94,6 +98,19 @@ public class HistoryActivity extends AppCompatActivity {
                         // Alert the user that the recordings are being deleted
                         Toast.makeText(getApplicationContext(), "Deleting " + numToDelete +
                                 " recordings...", Toast.LENGTH_LONG).show();
+
+                        DataSet[] newRecordings = new DataSet[pastRecordings.length-onesToDelete.size()];
+                        int newRecordingsCounter = 0;
+
+                        for (int i = 0; i < pastRecordings.length; i++) {
+                            while(onesToDelete.get(i)<0) i++;
+                            newRecordings[newRecordingsCounter] = pastRecordings[i];
+                            newRecordingsCounter++;
+                        }
+
+                        pastRecordings = newRecordings;
+
+                        SaveStaticClass.writeSaves(newRecordings, getApplicationContext());
 
                         // Reload the list of items
                         reloadListItems();
@@ -188,24 +205,17 @@ public class HistoryActivity extends AppCompatActivity {
      * post: ListView refreshed
      */
     public void reloadListItems() {
-
-        // TODO: add proper reading and remove dummy data
-
         // Get all the past recordings
         pastRecordings = SaveStaticClass.readSaves(getApplicationContext());
 
-        // Adding dummy data since SaveStaticClass isn't set up yet
-        pastRecordings = new DataSet[]{
-                new DataSet(new DataPoint[]{new DataPoint(0,0,0,0,0,0,0,0)}, new Date(), true),
-                new DataSet(new DataPoint[]{new DataPoint(1,0,0,0,0,0,0,0)}, new Date(), true),
-                new DataSet(new DataPoint[]{new DataPoint(2,0,0,0,0,0,0,0)}, new Date(), true)
-        };
+        if (pastRecordings!=null){
+            // Set up the adapter that puts things in the list correctly
+            listAdapter = new CustomLAdapter(this, pastRecordings);
 
-        // Set up the adapter that puts things in the list correctly
-        listAdapter = new CustomLAdapter(this, pastRecordings);
+            // Set the adapter of the list to the newly created custom adapter
+            listView.setAdapter(listAdapter);
 
-        // Set the adapter of the list to the newly created custom adapter
-        listView.setAdapter(listAdapter);
+        }
     }
 
 }

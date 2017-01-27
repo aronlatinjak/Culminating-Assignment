@@ -13,60 +13,95 @@ import java.util.*;
 
 public class SaveStaticClass implements Serializable {
 
+    public static final String SAVE_FILE_NAME = "DataSaved";
+
     /**
-     * Dummy method for saving
-     * @param ds the DataSet to save
+     * Saves the provided set of data.
+     * @param dataSets the DataSet to save
      * @param context the application context
      */
-    public static void setSettings(DataSet ds, Context context) {
-        File dataFile = new File(context.getFilesDir(), "DataSet.txt");
+    public static void writeSaves(DataSet[] dataSets, Context context) {
+        File dataFile = new File(context.getFilesDir(), SAVE_FILE_NAME);
         try {
-            dataFile.createNewFile();
-            FileOutputStream fos = new FileOutputStream(dataFile);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(ds);
+            if (dataFile.exists()) {
+                dataFile.delete();
+            }
+            System.out.println("File creation successful: " + dataFile.createNewFile());
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(dataFile));
+            oos.writeObject(dataSets);
+            oos.close();
             Toast.makeText(context, "Data saved", Toast.LENGTH_LONG).show();
         } catch (IOException ioe) {
             Toast.makeText(context, "Data failed to save", Toast.LENGTH_LONG).show();
+            System.err.println("Data failed to save: " + ioe.getLocalizedMessage());
         }
     }
 
     /**
-     * Dummy method for reading saves
+     * Reads the internally saved data sets.
      * @return
      */
-    public static DataSet readSaves(Context context) {
+    public static DataSet[] readSaves(Context context) {
 
-        DataSet dataSet;
+        DataSet[] data = null;
+        ArrayList<DataSet> dataSets = new ArrayList<>();
 
         try {
-            File dataFile = new File(context.getExternalFilesDir(null), "DataSaved");
+
+            File dataFile = new File(context.getFilesDir(), SAVE_FILE_NAME);
 
             if (dataFile.exists()){
 
                 FileInputStream fis = new FileInputStream(dataFile);
                 ObjectInputStream ois = new ObjectInputStream(fis);
-                dataSet = (DataSet) ois.readObject();
-
-                ois.read();
+                while(ois.available() > 0) {
+                    dataSets.add((DataSet) ois.readObject());
+                }
+                System.out.println("Number of elements read from file: " + dataSets.size());
+            } else {
+                Toast.makeText(context, "derp, there is no file", Toast.LENGTH_LONG).show();
             }
-            else {
-
-                dataSet = new DataSet();
-                dataFile.createNewFile();
-                FileOutputStream fos = new FileOutputStream(dataFile);
-
-                ObjectOutputStream ois = new ObjectOutputStream(fos);
-                ois.writeObject(dataSet);
-            }
-        }
-        catch(IOException | ClassNotFoundException ioe){
-
-            System.err.println(ioe.getMessage());
-            dataSet = new DataSet();
+        } catch (IOException ioe) {
+            System.err.println("File reading failed: " + ioe.getLocalizedMessage());
+            Toast.makeText(context, "File reading failed", Toast.LENGTH_LONG)
+                    .show();
+        } catch (ClassNotFoundException cnfe) {
+            System.err.println("File reading failed: " + cnfe.getLocalizedMessage());
         }
 
-        return(dataSet);
+        if (!dataSets.isEmpty()) {
+            data = new DataSet[dataSets.size()];
+            for (int i = 0; i < data.length; i++) {
+                data[i] = dataSets.get(i);
+            }
+            System.out.println("Number of items detected in file: " + data.length);
+        } else {
+            System.out.println("Number of items detected in file: 0");
+        }
+
+        return(data);
+    }
+
+    /**
+     * Save a single data set. used after a recording has been taken.
+     * @param dataSet
+     * @param context
+     */
+    public static void saveDataSet(DataSet dataSet, Context context) {
+        DataSet[] oldData = readSaves(context);
+        DataSet[] newData;
+        if (oldData != null && oldData.length > 0) {
+            newData = new DataSet[oldData.length + 1];
+            for (int i = 0; i < oldData.length; i++) {
+                newData[i] = oldData[i];
+            }
+
+            newData[newData.length - 1] = dataSet;
+        } else {
+            newData = new DataSet[]{dataSet};
+        }
+        writeSaves(newData, context);
+
     }
 
     /**

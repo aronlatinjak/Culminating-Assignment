@@ -4,11 +4,13 @@ package com.example.d.culminatingproject;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Stores a single set of data taken from the sensors
  * Created by D on 2017-01-16.
  */
-public class DataPoint implements Parcelable {
+public class DataPoint implements Parcelable, Serializable {
 
     private long t;
     private float vX;

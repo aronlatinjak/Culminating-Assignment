@@ -6,6 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -105,13 +107,10 @@ public class StatisticsActivity extends AppCompatActivity implements SensorEvent
             public void onClick(View v) {
                 dataSet.finish();
 
-                // TODO: add save method here
-
-                Toast.makeText(getApplicationContext(),"Recording saved", Toast.LENGTH_SHORT)
-                        .show();
+                SaveStaticClass.saveDataSet(dataSet, getApplicationContext());
 
                 Intent i = new Intent(getApplicationContext(), HistoryViewActivity.class);
-                i.putExtra("data_set", dataSet);
+                i.putExtra("data_set", (Parcelable) dataSet);
                 i.putExtra("came_from_recording", true);
                 startActivity(i);
             }
