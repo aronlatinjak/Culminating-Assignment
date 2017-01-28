@@ -73,7 +73,7 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                final ArrayList<Integer> onesToDelete = new ArrayList<Integer>();
+                final ArrayList<Integer> onesToDelete = new ArrayList<>();
 
                 // Figure out which ones should be deleted
                 for (int i = 0; i < pastRecordings.length; i++) {
@@ -103,9 +103,14 @@ public class HistoryActivity extends AppCompatActivity {
                         int newRecordingsCounter = 0;
 
                         for (int i = 0; i < pastRecordings.length; i++) {
-                            while(onesToDelete.get(i)<0) i++;
-                            newRecordings[newRecordingsCounter] = pastRecordings[i];
-                            newRecordingsCounter++;
+                            // Scroll past and skip adding the ones slated for death
+                            while(onesToDelete.indexOf(i)>=0) i++;
+                            // If the last value hasn't been scrolled past
+                            if (i < pastRecordings.length) {
+                                // Add the current value to the new list
+                                newRecordings[newRecordingsCounter] = pastRecordings[i];
+                                newRecordingsCounter++;
+                            }
                         }
 
                         pastRecordings = newRecordings;
@@ -208,13 +213,15 @@ public class HistoryActivity extends AppCompatActivity {
         // Get all the past recordings
         pastRecordings = SaveStaticClass.readSaves(getApplicationContext());
 
-        if (pastRecordings!=null){
+        if (pastRecordings!=null&&pastRecordings.length>0){
             // Set up the adapter that puts things in the list correctly
             listAdapter = new CustomLAdapter(this, pastRecordings);
 
             // Set the adapter of the list to the newly created custom adapter
             listView.setAdapter(listAdapter);
 
+        } else {
+            listView.setAdapter(null);
         }
     }
 

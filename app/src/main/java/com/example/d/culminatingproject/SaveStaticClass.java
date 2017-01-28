@@ -28,7 +28,10 @@ public class SaveStaticClass implements Serializable {
             }
             System.out.println("File creation successful: " + dataFile.createNewFile());
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(dataFile));
-            oos.writeObject(dataSets);
+            for (DataSet dataSet:
+                 dataSets) {
+                oos.writeObject(dataSet);
+            }
             oos.close();
             Toast.makeText(context, "Data saved", Toast.LENGTH_LONG).show();
         } catch (IOException ioe) {
@@ -38,48 +41,42 @@ public class SaveStaticClass implements Serializable {
     }
 
     /**
-     * Reads the internally saved data sets.
+     * Reads the saves from the file and returns them as an array of DataSets
+     * @param context
      * @return
      */
     public static DataSet[] readSaves(Context context) {
-
-        DataSet[] data = null;
-        ArrayList<DataSet> dataSets = new ArrayList<>();
+        File file = new File(context.getFilesDir(), SAVE_FILE_NAME);
+        ArrayList<Object> readObjects = new ArrayList<>();
+        DataSet[] dataSets = null;
 
         try {
-
-            File dataFile = new File(context.getFilesDir(), SAVE_FILE_NAME);
-
-            if (dataFile.exists()){
-
-                FileInputStream fis = new FileInputStream(dataFile);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                while(ois.available() > 0) {
-                    dataSets.add((DataSet) ois.readObject());
+            if (file.exists()) {
+                ObjectInputStream ois = new ObjectInputStream(
+                        new FileInputStream(file));
+                Object current;
+                try {
+                    while ((current = ois.readObject()) != null) {
+                        readObjects.add(current);
+                    }
+                } catch (EOFException eofe) {
+                    ois.close();
                 }
-                System.out.println("Number of elements read from file: " + dataSets.size());
-            } else {
-                Toast.makeText(context, "derp, there is no file", Toast.LENGTH_LONG).show();
+                dataSets = new DataSet[readObjects.size()];
+                for (int i = 0; i < readObjects.size(); i++) {
+                    try {
+                        dataSets[i] = (DataSet) readObjects.get(i);
+                    } catch (ClassCastException cce) {
+                        // If something is in the file that shouldn't be, delete it
+                        file.delete();
+                    }
+                }
             }
-        } catch (IOException ioe) {
-            System.err.println("File reading failed: " + ioe.getLocalizedMessage());
-            Toast.makeText(context, "File reading failed", Toast.LENGTH_LONG)
-                    .show();
-        } catch (ClassNotFoundException cnfe) {
-            System.err.println("File reading failed: " + cnfe.getLocalizedMessage());
+        } catch (IOException | ClassNotFoundException iocnfe) {
+            System.err.println("Something went wrong: " + iocnfe.toString());
+            Toast.makeText(context, "Failed to load saved recordings", Toast.LENGTH_SHORT).show();
         }
-
-        if (!dataSets.isEmpty()) {
-            data = new DataSet[dataSets.size()];
-            for (int i = 0; i < data.length; i++) {
-                data[i] = dataSets.get(i);
-            }
-            System.out.println("Number of items detected in file: " + data.length);
-        } else {
-            System.out.println("Number of items detected in file: 0");
-        }
-
-        return(data);
+        return dataSets;
     }
 
     /**
