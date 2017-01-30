@@ -24,6 +24,11 @@ public class HelpActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Respond to a back button press on the top bar.
+     * @param item The part of the top bar that was taped.
+     * @return true if the back button was pressed.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

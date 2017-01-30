@@ -38,6 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
         velocitySwitch = (Switch) findViewById(R.id.switchVelocity);
         timeSwitch = (Switch) findViewById(R.id.switchTime);
 
+        // Read the setting from file
         s = SaveStaticClass.readSettings(getApplicationContext());
 
         // Update the sliders to what is specified in the current settings

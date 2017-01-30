@@ -46,6 +46,10 @@ public class DataPoint implements Parcelable, Serializable {
 
     }
 
+    /**
+     * Create a DataPoint from the given Parcel.
+     * @param in The parcel to read from.
+     */
     protected DataPoint(Parcel in) {
         t = in.readLong();
         vX = in.readFloat();
@@ -56,6 +60,9 @@ public class DataPoint implements Parcelable, Serializable {
         aZ = in.readFloat();
     }
 
+    /**
+     * For reading the DataPoint after it has been passed between views.
+     */
     public static final Creator<DataPoint> CREATOR = new Creator<DataPoint>() {
         @Override
         public DataPoint createFromParcel(Parcel in) {
@@ -78,14 +85,26 @@ public class DataPoint implements Parcelable, Serializable {
         return t;
     }
 
+    /**
+     * Returns the data point's x velocity
+     * @return The data point's x velocity
+     */
     public float getXVelocity() {
         return vX;
     }
 
+    /**
+     * Returns the data point's y velocity
+     * @return The data point's y velocity
+     */
     public float getYVelocity() {
         return vY;
     }
 
+    /**
+     * Returns the data point's z velocity
+     * @return The data point's z velocity
+     */
     public float getZVelocity() {
         return vZ;
     }
@@ -99,6 +118,9 @@ public class DataPoint implements Parcelable, Serializable {
     public float getVelocity() {
         return (float)Math.sqrt(vX*vX + vY*vY + vZ*vZ);
     }
+
+    // Apparently these next three methods are not yet used, but they
+    // may be useful for the export feature
 
     public float getXAcceleration() {
         return aX;
@@ -122,11 +144,20 @@ public class DataPoint implements Parcelable, Serializable {
         return (float)Math.sqrt(aX*aX + aY*aY + aZ*aZ);
     }
 
+    /**
+     * Returns zero
+     * @return zero
+     */
     @Override
     public int describeContents() {
         return 0;
     }
 
+    /**
+     * Write this DataPoint to a parcel.
+     * @param dest The Parcel to write to.
+     * @param flags Don't known what this does, and it is not used.
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(t);

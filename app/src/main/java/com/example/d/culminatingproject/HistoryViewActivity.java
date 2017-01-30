@@ -21,9 +21,10 @@ import java.text.DecimalFormat;
 
 /**
  * Used to view a recording that has already been finished.
+ * Most of this code is copy/pasted from the StatisticsActivity class but
+ * some of it has been modified.
  * Created by D on 2017-01-25.
  */
-
 public class HistoryViewActivity extends AppCompatActivity {
 
     private LineGraphSeries<DataPoint> points;
@@ -35,7 +36,7 @@ public class HistoryViewActivity extends AppCompatActivity {
     private Switch velAccelSwitch;
     private GraphView graphView;
     private ImageButton downloadButton;
-    // TextViews!
+    // TextViews (WooHoo!)
     private TextView graphTitle;
     private TextView maxVelocityView;
     private TextView maxAccelerationView;
@@ -77,7 +78,7 @@ public class HistoryViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                // TODO: make work
+                // Export the data set as a .csv
                 SaveStaticClass.exportAsCsv(getApplicationContext(), dataSet);
 
                 // Tell the user that they downloaded the file

@@ -21,7 +21,7 @@ import java.util.Date;
  */
 public class HistoryActivity extends AppCompatActivity {
 
-
+    // The past recordings, to be displayed in the list
     DataSet[] pastRecordings;
 
     // The all-essential ListAdapter
@@ -102,6 +102,8 @@ public class HistoryActivity extends AppCompatActivity {
                         DataSet[] newRecordings = new DataSet[pastRecordings.length-onesToDelete.size()];
                         int newRecordingsCounter = 0;
 
+                        // For each of the past recordings, check if they should be in the
+                        // new recordings list, and if so, add them to it
                         for (int i = 0; i < pastRecordings.length; i++) {
                             // Scroll past and skip adding the ones slated for death
                             while(onesToDelete.indexOf(i)>=0) i++;
@@ -113,8 +115,10 @@ public class HistoryActivity extends AppCompatActivity {
                             }
                         }
 
+                        // Update the past recordings in RAM
                         pastRecordings = newRecordings;
 
+                        // Update the past recordings in storage
                         SaveStaticClass.writeSaves(newRecordings, getApplicationContext());
 
                         // Reload the list of items
@@ -189,8 +193,8 @@ public class HistoryActivity extends AppCompatActivity {
 
     /**
      * For the back button.
-     * @param item
-     * @return
+     * @param item The item in the top bar that was clicked.
+     * @return True if the back button was pressed.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -221,6 +225,7 @@ public class HistoryActivity extends AppCompatActivity {
             listView.setAdapter(listAdapter);
 
         } else {
+            // Don't display anything in the ListView
             listView.setAdapter(null);
         }
     }

@@ -16,7 +16,7 @@ public class Setting implements Serializable {
     private boolean h;
 
     /**
-     * Represent the different device refresh rates
+     * Represent the different device refresh rates.
      */
     public enum RefreshRate {
         SLOW, MEDIUM, FAST,
@@ -25,7 +25,7 @@ public class Setting implements Serializable {
     /**
      * Create a new setting.
      * pre: none
-     * post: new setting created
+     * post: new setting created.
      * @param rate the desired refresh rate
      * @param kilometers should speed be in km/h?
      * @param hours should time be in hours?
@@ -45,23 +45,23 @@ public class Setting implements Serializable {
 
     /**
      * Returns the refresh rate of this setting.
-     * @return the refresh rate of this setting
+     * @return the refresh rate of this setting.
      */
     public RefreshRate getRefreshRate() {
         return refreshRate;
     }
 
     /**
-     * Returns true if speed should be in km/h
-     * @return true if speed should be in km/h, otherwise, false
+     * Returns true if speed should be in km/h.
+     * @return true if speed should be in km/h, otherwise, false.
      */
     public boolean isInKMPerH() {
         return kmh;
     }
 
     /**
-     * Returns true if time should be in hours
-     * @return true if time should be in hours, otherwise false
+     * Returns true if time should be in hours.
+     * @return true if time should be in hours, otherwise false.
      */
     public boolean isInHours() {
         return h;

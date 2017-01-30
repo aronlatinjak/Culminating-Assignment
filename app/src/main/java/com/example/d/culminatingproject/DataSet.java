@@ -211,7 +211,7 @@ public class DataSet implements Comparable, Parcelable, Serializable {
     /**
      * Write all the data of this dataset to a parcel so that it can be sent between views
      * @param dest the parcel
-     * @param flags don't know what this is
+     * @param flags don't know what this is, and it is not used
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {

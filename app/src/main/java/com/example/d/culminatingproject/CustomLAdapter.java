@@ -24,6 +24,11 @@ class CustomLAdapter extends ArrayAdapter<DataSet> {
     private DataSet[] data;
     private boolean[] isCheckedArray;
 
+    /**
+     * Create a new adapter, given a set of data sets
+     * @param context The application context
+     * @param dataSets The data sets to use in the list
+     */
     CustomLAdapter(Context context, DataSet[] dataSets) {
         super(context, R.layout.listviewrow_custom, dataSets);
         data = dataSets;
@@ -43,11 +48,13 @@ class CustomLAdapter extends ArrayAdapter<DataSet> {
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        // Make a view for the list element
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View customView = inflater.inflate(R.layout.listviewrow_custom, parent, false);
 
         final int accessiblePosition = position;
 
+        // Get the GUI elements of this view
         TextView nameView = (TextView) customView.findViewById(R.id.itemNameTextView);
         nameView.setText((data[position].getTimestamp()).toString());
         CheckBox checkBox = (CheckBox) customView.findViewById(R.id.itemCheckbox);
@@ -56,12 +63,7 @@ class CustomLAdapter extends ArrayAdapter<DataSet> {
         customView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                String output = "You clicked element #" + accessiblePosition;
 
-                // Makes the alert box appear
-                Toast.makeText(getContext(), output, Toast.LENGTH_LONG).show();
-                */
                 // Send the reader to a new activity with the data present
                 Intent recordingIntent = new Intent(getContext(), HistoryViewActivity.class);
                 recordingIntent.putExtra("data_set", (Parcelable) data[accessiblePosition]);
@@ -81,6 +83,11 @@ class CustomLAdapter extends ArrayAdapter<DataSet> {
         return customView;
     }
 
+    /**
+     * Find if a certain checkbox is currently checked.
+     * @param position Position of the checkbox in the list.
+     * @return True if the box is check, false otherwise.
+     */
     public boolean getIsChecked(int position) {
         return isCheckedArray[position];
     }
