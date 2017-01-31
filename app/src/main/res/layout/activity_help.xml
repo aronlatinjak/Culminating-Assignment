@@ -21,21 +21,6 @@
         android:layout_alignParentEnd="true" />
 
     <TextView
-        android:text="How to use:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="36dp"
-        android:id="@+id/textView4"
-        android:textSize="20sp"
-        android:textStyle="normal|bold"
-        android:textColor="@color/colorAccent"
-        tools:textColor="@android:color/holo_blue_bright"
-        android:textIsSelectable="true" />
-
-    <TextView
         android:text="Press the save button to save the recording. View saved recordings though the history button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,10 +43,27 @@
         android:textSize="16sp"/>
 
     <TextView
-        android:text="Click on the start button to begin recording. Press the stop button on the main page to stop recording."
+        android:text="How to use:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:id="@+id/textView4"
+        android:textSize="20sp"
+        android:textStyle="normal|bold"
+        android:textColor="@color/colorAccent"
+        tools:textColor="@android:color/holo_blue_bright"
+        android:textIsSelectable="true"
+        android:layout_marginLeft="29dp"
+        android:layout_marginStart="29dp"
+        android:layout_marginTop="46dp"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Click on the start button to begin recording. Press the stop button on the page to stop recording."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
         android:id="@+id/textView5"
         android:textSize="16sp"
         android:layout_below="@+id/textView4"
