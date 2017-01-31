@@ -9,6 +9,7 @@ import java.util.*;
 
 /**
  * Created by Aron on 2017-01-22.
+ * hi
  */
 
 public class SaveStaticClass {
@@ -18,7 +19,7 @@ public class SaveStaticClass {
     // This is the name of the save file for the settings
     public static final String SETTINGS_FILE_NAME = "Settings.txt";
 
-    /**
+     /**
      * Saves the provided sets of data.
      * pre: none
      * post: sets of data updated in internal storage.

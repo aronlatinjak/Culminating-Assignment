@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
 
+
         <!-- Statistics activity
                 The parent activity name attribute sets the main screen as
                 the one that should be accessed when the back arrow is tapped-->
