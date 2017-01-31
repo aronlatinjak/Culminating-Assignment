@@ -47,12 +47,29 @@
             android:id="@+id/buttonHistory"
             android:onClick="startHistory"/>
 
-        <Button
-            android:text="@string/help_title"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonHelp"
-            android:onClick="startHelp"/>
+            android:layout_height="62dp">
+
+            <Button
+                android:text="@string/help_title"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonHelp"
+                android:onClick="startHelp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:text="Credits"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonCredits"
+                android:layout_weight="1" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

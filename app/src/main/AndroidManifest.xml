@@ -79,6 +79,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.d.culminatingproject.HistoryActivity" />
         </activity>
+        <!--Credits activity -->
+
+
 
     </application>
 
